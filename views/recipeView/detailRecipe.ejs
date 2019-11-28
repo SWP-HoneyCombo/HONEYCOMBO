@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HoneyCombo</title>
+</head>
+<body>
+<h1>레시피 상세보기 페이지</h1>
+<nav>
+    <!--    login, signup, logout, product, reciped -->
+    <ul>
+        <li><a href="/product/main">상품</a></li>
+        <li><a href="/recipe/mainRecipe">레시피</a></li>
+    </ul>
+
+    <div class="auth">
+        <% if (isLoggedin)  { %>
+            <div>
+                <h5><%= userID %>님 안녕하세요!</h5>
+                <a href="/auth/logout">logout</a>
+                <a href="/auth/dropout">drop out</a>
+            </div>
+        <% } %>
+        <% if (!isLoggedin) { %>
+            <div>
+                <li><a href="/auth/login">login</a></li>
+                <li><a href="/auth/signup">signup</a></li>
+            </div>
+        <% } %>
+    </div>
+</nav>
+<section class="recipeInfo">
+    <section class="thumnail">
+        <% var imgSrc = '/images/' + items.recipeData[0].imgPath %>
+        <% var recipeTitle = items.recipeData[0].title %>
+        <ul>
+            <li>
+                <img src="<%= imgSrc %>" alt="Submit Form"/>
+                <span>TITLE : <%= recipeTitle %></span>
+            </li>
+        </ul>
+    </section>
+    <section class="products">
+        <% for ( var i = 0; i < items.usedProduct.length; i++){ %>
+            <article>
+                <!--TODO : change source path and change IMGFILENAME to format contained file-->
+                <% var imgSrc = '/images/' + items.usedProduct[i].imgPath %>
+                <% var itemName = items.usedProduct[i].itemName %>
+                <% var itemPrice = items.usedProduct[i].itemPrice %>
+
+                <li>
+                    <img src="<%= imgSrc %>" alt="item Img"/>
+                    <span><%= itemPrice %>won</span>
+                    <span><%= itemName %></span>
+                </li>
+            </article>
+        <% } %>
+    </section>
+    <section class="recipeRating">
+        평점 : <%= avgRate %>
+        가격 : <%= items.recipeData[0].totalPrice %>
+    </section>
+    <section class="SNS-sharing">
+        Insta/Kakao/Facebook...
+    </section>
+    <section class="mainContents">
+
+    </section>
+    <section class="comments">
+        <p>댓글</p>
+        <ul>
+            <li class="eachComment">
+                <% for(var i = 0; i < items.comment.length; i++) { %>
+                    <% var commentIdx = String(i) %>
+                    <% var userId = items.comment[i].userId %>
+                    <% var commentContents = items.comment[i].commentContents %>
+                    <% var rate = items.comment[i].rate %>
+                    <%= userId %>&nbsp; | <%= commentContents %>&nbsp; | <%= rate %>
+                    <% if(isLoggedin && (userId == userID)) { %>
+            <li class="modifyComment">
+                <button name="">수정</button>
+            </li>
+            <li class="deleteComment">
+                <button name="">삭제</button>
+            </li>
+            <% }} %>
+            </li>
+
+            <h4>댓글쓰기</h4>
+            <li class="writeComment">
+                <form action="" method="post">
+                    <input type="text" name="commentWrite">
+                    <input type="number" name="usersRate">
+                </form>
+                <button name="submitComment">등록</button>
+            </li>
+
+        </ul>
+    </section>
+    <section>
+        <a href="/recipe/mainRecipe">목록보기</a>
+        <a href="/recipe/writeRecipe">글쓰기</a>
+    </section>
+</section>
+
+<!--댓글 수정 및 등록을 위한 스크립트-->
+<script>
+    document.querySelector('.comments').addEventListener('click', function (e) {
+        let url, method, data, fn;
+        const target = e.target;
+        const li = target.closest('li');
+        const eachComment = document.querySelector(".eachComment");
+        const type = li.className;
+        const title = '<%= recipeTitle %>'
+
+        if (target.tagName !== "BUTTON") return;
+
+        switch (type) {
+            case "writeComment":
+                url = "/recipe/detailRecipe/writeComment"
+                method = "POST"
+                // all elements select in form tag by name - maxPrice, minPrice
+                let inputs = [].slice.call(document.querySelector("form").elements);
+                data = inputs.reduce(function (pre, next) {
+                    pre[next.name] = next.value;
+                    return pre;
+                }, {});
+                data.recipeTitle = title;
+
+                fn = function (writeComment) {
+                    if (writeComment.result === 1) {
+                        console.log(writeComment)
+                        // TODO : redirect to rendering new comment
+                        // eachComment.innerHTML = writeComment.userId + '\t' + writeComment.contents + '\t' + writeComment.rate;
+                        window.location.href = '/recipe/detailRecipe/viewDetail/' + title
+                    } else {
+                        alert(writeComment.errMsg)
+                    }
+                }
+                break;
+            case "deleteComment":
+                url = "/recipe/detailRecipe/deleteComment/" + title
+                method = "DELETE"
+
+                fn = function (deleteComment) {
+                    if (deleteComment.result === 1) {
+                        console.log(deleteComment)
+                        alert(deleteComment.successMsg)
+                        window.location.href = '/recipe/detailRecipe/viewDetail/' + title
+                    } else {
+                        //TODO : redirection
+                        alert(deleteComment.errMsg)
+                    }
+                }
+                break;
+        }
+        sendNewComment(url, method, data, fn)
+    })
+
+    // @data : json format
+    function sendNewComment(url, method, data, fn) {
+        const xhr = new XMLHttpRequest()
+        xhr.open(method, url)
+
+        if (data) {
+            data = JSON.stringify(data)
+            console.log(data)
+            xhr.setRequestHeader('Content-Type', "application/json")
+        } else {
+            data = null
+        }
+        xhr.send(data)
+
+        xhr.addEventListener('load', function () {
+            const result = JSON.parse(xhr.responseText)
+            fn(result)
+        })
+    }
+</script>
+
+</body>
+</html>

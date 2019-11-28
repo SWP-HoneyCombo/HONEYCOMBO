@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HoneyCombo</title>
+</head>
+<body>
+<h1>레시피 작성 페이지</h1>
+<nav>
+    <ul>
+        <li><a href="/product/main">상품</a></li>
+        <li><a href="/recipe/mainRecipe">레시피</a></li>
+    </ul>
+
+    <% if (logged) { %>
+    <div>
+        <h5><%= ID %>님 안녕하세요!</h5>
+        <a href="/auth/logout">logout</a>
+        <a href="/auth/dropout">drop out</a>
+    </div>
+    <% } %>
+    <% if (!logged) { %>
+        <div>
+            <li><a href="/auth/login">login</a></li>
+            <li><a href="/auth/signup">signup</a></li>
+        </div>
+    <% } %>
+
+</nav>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HoneyCombo</title>
+</head>
+<body>
+<h1>레시피 메인 페이지</h1>
+<nav>
+    <!--    login, signup, logout, product, reciped -->
+    <ul>
+        <li><a href="/product/main">상품</a></li>
+        <li><a href="/recipe/mainRecipe">레시피</a></li>
+    </ul>
+
+    <div class="auth">
+        <% if (isLoggedin)  { %>
+            <div>
+                <h5><%= userID %>님 안녕하세요!</h5>
+                <a href="/auth/logout">logout</a>
+                <a href="/auth/dropout">drop out</a>
+            </div>
+        <% } %>
+        <% if (!isLoggedin) { %>
+            <div>
+                <li><a href="/auth/login">login</a></li>
+                <li><a href="/auth/signup">signup</a></li>
+            </div>
+        <% } %>
+    </div>
+</nav>
+
+<section class="showWrap">
+    <ul>
+        <!--TODO: if text input area is empty, blocking button at front and don't send request to server-->
+        <li class="recipePriceSearch">
+            <form action="" method="post">
+                <!--                TODO : using type = number-->
+                <input type="text" name="minPrice">원 ~
+                <input type="text" name="maxPrice">원
+            </form>
+            <button>검색하기</button>
+        </li>
+
+    </ul>
+    <!--TODO: show default result recipe list using 'see more' button-->
+    <section class="defaultResult">
+        <span>현재 <%= items.length %>개의 레시피가 존재합니다 :) </span>
+        <% if(items != null && items.length > 0){ %>
+        <ul>
+            <% for ( var i = 0; i < items.length; i++){ %>
+                <article>
+                    <!--TODO : change source path and change IMGFILENAME to format contained file-->
+                    <% var imgSrc = '/images/' + items[i].IMGFILENAME %>
+                    <% var tagStr = items[i].TAGCONTENTS %>
+                    <% var subItemList = tagStr.split('#') %>
+                    <% var detailUrl = '/recipe/detailRecipe/' + items[i].TITLE %>
+                    <% var tempTitle = items[i].TITLE %>
+
+                    <h4><%= i %>번째 레시피</h4>
+                    <li class="seeDetail">
+                        <% var actionUrl = "/recipe/detailRecipe/viewDetail/" + tempTitle %>
+                        <form action="<%= actionUrl %>" method='get'>
+                            <input type="image" src="<%= imgSrc %>" alt="Submit Form"/>
+                        </form>
+                    </li>
+                    <li><%= tempTitle %></li>
+                    <li><%= items[i].USERID %></li>
+                    <li><%= items[i].TOTALPRICE %></li>
+                    <li>
+                        <% for( var j = 1; j < subItemList.length; j++) { %>
+                            <%= subItemList[j] %>&nbsp;|&nbsp;
+                        <% } %>
+                    </li>
+                    <br>
+                </article>
+            <% } %>
+            <% } else { %>
+                <p>상품 없음</p>
+            <% } %>
+        </ul>
+    </section>
+</section>
+
+<a href="/recipe/writeRecipe">글쓰기</a>
+
+<!--ajax javascript part-->
+<script>
+    document.querySelector('.showWrap').addEventListener('click', function (e) {
+        let url, method, data, fn;
+        const target = e.target;
+        const li = target.closest('LI');
+        const showResult = document.querySelector(".defaultResult");
+        const type = li.className;
+
+        if (target.tagName !== "BUTTON") return;
+
+        switch (type) {
+            case "recipePriceSearch":
+                url = "/recipe/mainRecipe/search"
+                method = "POST"
+                // all elements select in form tag by name - maxPrice, minPrice
+                let inputs = [].slice.call(document.querySelector("form").elements);
+                data = inputs.reduce(function (pre, next) {
+                    pre[next.name] = next.value;
+                    return pre;
+                }, {});
+
+                fn = function (recipeList) {
+                    if (recipeList.result === 1) {
+                        // TODO : show result in default section
+                        for (var i = 0; i < recipeList.items.length; i++) {
+                            showResult.innerHTML = recipeList.items[i].TITLE;
+                        }
+                    } else {
+                        showResult.innerHTML = "일치하는 레시피 없음"
+                    }
+                }
+                break;
+        }
+        sendAjax(url, method, data, fn)
+    })
+
+    // @data : json format
+    function sendAjax(url, method, data, fn) {
+        const xhr = new XMLHttpRequest()
+        xhr.open(method, url)
+
+        if (data) {
+            data = JSON.stringify(data)
+            xhr.setRequestHeader('Content-Type', "application/json")
+        } else {
+            data = null
+        }
+        xhr.send(data)
+
+        xhr.addEventListener('load', function () {
+            const result = JSON.parse(xhr.responseText)
+            fn(result)
+        })
+    }
+</script>
+
+</body>
+</html>

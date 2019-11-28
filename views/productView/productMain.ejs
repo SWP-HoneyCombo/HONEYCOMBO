@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HoneyCombo</title>
+</head>
+<body>
+<h3>메인 상품 페이지</h3>
+<nav>
+    <!--    login/signup/logout/product/reciped -->
+    <ul>
+        <li><a href="/product/main">상품</a></li>
+        <li><a href="/recipe/mainRecipe">레시피</a></li>
+    </ul>
+
+    <div class="auth">
+        <% if (isLoggedin)  { %>
+        <div>
+            <h5><%= userID %>님 안녕하세요!</h5>
+            <a href="/auth/logout">logout</a>
+            <a href="/auth/dropout">drop out</a>
+        </div>
+        <% } %>
+        <% if (!isLoggedin) { %>
+            <div>
+                <li><a href="/auth/login">login</a></li>
+                <li><a href="/auth/signup">signup</a></li>
+            </div>
+        <% } %>
+    </div>
+</nav>
+
+<section class="showWrap">
+    <ul>
+        <!--TODO: if text input area is empty, blocking button at front and don't send request to server-->
+        <li class="productSearch">
+            <input type="text" name="itemName">
+            <button>검색하기</button>
+        </li>
+        <li class="companySort">
+            <button name="GS">GS</button>
+            <button name="CU">CU</button>
+            <button name="7-Eleven">7-Eleven</button>
+        </li>
+        <li class="priceSort">
+            <!--            이 중 하나만 먼저-->
+            <button>인기상품순</button>
+            <button>최신등록순</button>
+            <button>낮은가격순</button>
+            <button>높은가격순</button>
+        </li>
+    </ul>
+    <!--TODO: show default result product list using 'see more' button-->
+    <section class="defaultResult">
+        <% if(items != null && items.length > 0){ %>
+        <ul>
+            <% for ( var i = 0; i < items.length; i++){ %>
+                <article>
+                    <!--TODO : change source path and change IMGFILENAME to format contained file-->
+                    <% var imgSrc = '/images/' + items[i].IMGFILENAME %>
+                    <% console.log(imgSrc) %>
+                    <h4><%= i %>번째 상품</h4>
+                    <li><%= items[i].ITEMNAME %></li>
+                    <li><%= items[i].ITEMPRICE %></li>
+                    <li><%= items[i].COMPANY %></li>
+                    <li><%= items[i].REGISTRATIONDATE %></li>
+                    <li><img src=<%= imgSrc %>></li>
+                    <br>
+                </article>
+            <% } %>
+            <% } else { %>
+                <p>상품 없음</p>
+            <% } %>
+        </ul>
+    </section>
+</section>
+
+<script>
+    document.querySelector('.showWrap').addEventListener('click', function (e) {
+        let url, method, data, fn;
+        const target = e.target;
+        const li = target.closest('LI');
+        const showResult = document.querySelector(".defaultResult");
+        const type = li.className;
+
+        if (target.tagName !== "BUTTON") return;
+
+        switch (type) {
+            case "productSearch":
+                url = "/product/main/search/" + li.getElementsByTagName("input")[0].value;
+                method = "GET"
+                fn = function (productList) {
+                    if (productList.result === 1) {
+                        console.log(productList.items)
+                        // TODO : show result in default section
+                        for (var i = 0; i < productList.items.length; i++) {
+                            showResult.innerHTML = productList.items[i].ITEMNAME;
+                        }
+                    } else {
+                        showResult.innerHTML = "일치하는 상품 이름 없음"
+                    }
+                }
+                break;
+
+            case "companySort":
+                var companyName = target.name
+                url = "/product/main/classify/" + companyName
+                method = "GET"
+                fn = function (productByCompany) {
+                    if (productByCompany.result === 1) {
+                        console.log(productByCompany.items)
+                        // TODO : show result in default section
+                        for (var i = 0; i < productByCompany.items.length; i++) {
+                            showResult.innerHTML = productByCompany.items[i].ITEMNAME;
+                        }
+                    } else {
+                        showResult.innerHTML = "회사별 상품 결과 없음"
+                    }
+                }
+                break;
+        }
+        sendAjax(url, method, data, fn)
+    })
+
+    // @data : json format
+    function sendAjax(url, method, data, fn) {
+        const xhr = new XMLHttpRequest()
+        xhr.open(method, url)
+
+        if (data) {
+            data = JSON.stringify(data)
+            xhr.setRequestHeader('Content-Type', "application/json")
+        } else {
+            data = null
+        }
+        console.log(xhr)
+        xhr.send(data)
+
+        xhr.addEventListener('load', function () {
+            const result = JSON.parse(xhr.responseText)
+            fn(result)
+        })
+    }
+</script>
+</body>
+</html>

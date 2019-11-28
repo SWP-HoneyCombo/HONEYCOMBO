@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HoneyCombo</title>
+</head>
+<body>
+<form action="/auth/dropout" method="post">
+    check PW : <input type="password" name="inputPW"/> <br/>
+</form>
+<button class="dropoutBtn">회원탈퇴</button>
+<p><a href="/product/main">Home</a></p>
+
+<script>
+    document.querySelector('.dropoutBtn').addEventListener('click', function (e) {
+        let fn;
+        let inputs = [].slice.call(document.querySelector("form").elements);
+        data = inputs.reduce(function (pre, next) {
+            pre[next.name] = next.value;
+            return pre;
+        }, {});
+        console.log("data = " + data)
+
+        fn = function (checkResult) {
+            if (checkResult.result === 0) {
+                console.log(checkResult)
+                alert(checkResult.errMsg)
+                document.location.href = "/auth/dropout"
+            } else {
+                alert(checkResult.successMsg)
+                document.location.href = "/";
+            }
+        }
+        sendToCheck('/auth/dropout/dropUser', data, fn)
+    })
+
+    function sendToCheck(url, data, fn) {
+        const xhr = new XMLHttpRequest()
+        xhr.open('POST', url)
+        if (data) {
+            data = JSON.stringify(data)
+            console.log(data)
+            xhr.setRequestHeader('Content-Type', "application/json")
+        } else {
+            data = null
+        }
+        xhr.send(data)
+
+        xhr.addEventListener('load', function () {
+            const result = JSON.parse(xhr.responseText)
+            fn(result)
+        })
+    }
+</script>
+</body>
+</html>

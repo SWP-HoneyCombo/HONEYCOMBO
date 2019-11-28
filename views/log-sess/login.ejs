@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HoneyCombo</title>
+</head>
+<body>
+
+<div class="">
+    <form action="/auth/login" method="post">
+        ID : <input type="text" name="ID"/> <br/>
+        PW : <input type="password" name="PW"/> <br/>
+        <input class="loginBtn" type="submit" value="로그인">
+    </form>
+
+    <p><a href="/auth/signup">Register</a></p>
+    <p><a href="/product/main">Home</a></p>
+
+    <div class="logResult"></div>
+</div>
+
+<!--Error Message - json form-->
+<script>
+    document.querySelector('.loginBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        var ID = document.getElementsByName('ID')[0].value
+        var PW = document.getElementsByName('PW')[0].value;
+        sendAjax('http://localhost:3000/auth/login', {'ID': ID, 'PW': PW}
+        );
+    })
+
+    function sendAjax(url, data) {
+        data = JSON.stringify(data);
+        console.log(data)
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', url);
+        xhr.setRequestHeader('Content-Type', "application/json");
+        xhr.send(data);
+        xhr.addEventListener('load', function () {
+            var result = JSON.parse(xhr.responseText);
+            var resultDiv = document.querySelector(".logResult");
+            if (result.ID) {
+                //resultDiv.innerHTML = "welcome, " + result.email + "!!";
+                window.location.href = "/product/main";
+            } else if (xhr.status === 401) {
+                // alert(result);
+                resultDiv.innerHTML = result;
+            } else {
+                // alert(result);
+                resultDiv.innerHTML = result;
+            }
+
+        });
+    }
+</script>
+
+</body>
+</html>
