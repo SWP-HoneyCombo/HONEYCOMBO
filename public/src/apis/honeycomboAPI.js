@@ -90,7 +90,7 @@ const honeycomboAPI = {
         let url = "/recipe/writeRecipe/postRecipe"
         let method = "POST"
         await sendRequest(url, method, data);
-        window.location.href = '/recipe/detailRecipe/viewDetail/' + data.title;
+        window.location.href = '/recipe/detailRecipe/viewDetail/' + data.title + '/';
         // await sendRequestNoResponse(url, method, data);
     }
   };
