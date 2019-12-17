@@ -89,7 +89,7 @@
                     <% for ( var i = 0; i < items.length; i++){ %>
                         <article class="recipe mx-4 my-1">
                             <!--TODO : change source path and change IMGFILENAME to format contained file-->
-                            <% var imgSrc = '/images/'+items[i].IMGFILENAME %>
+                            <% var imgSrc = items[i].IMGFILENAME %>
                             <% var tagStr = items[i].TAGCONTENTS %>
                             <% var subItemList = tagStr.split('#') %>
                             <% var detailUrl = '/recipe/detailRecipe/' + items[i].TITLE %>
