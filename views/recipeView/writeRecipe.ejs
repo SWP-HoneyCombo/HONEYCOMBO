@@ -225,6 +225,33 @@
     <!-- Bootstrap core JavaScript
 ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script>
+        var file = document.querySelector('#file-input');
+        file.onchange = function(){
+            var fileList = file.files;
+
+            var reader = new FileReader();
+            reader.readAsDataURL(fileList[0]);
+
+            reader.onload = function(){
+                var tempImage = new Image();
+                tempImage.src = reader.result;
+                tempImage.onload = function(){
+                    var canvas = document.createElement('canvas');
+                    var canvasContext= canvas.getContext("2d");
+
+                    canvas.wdith=400;
+                    canvas.height=300;
+
+                    canvasContext.drawImage(this, 0, 0, 400, 300);
+
+                    var dataURI = canvas.toDataURL("image/jpeg");
+
+                    document.getElementById('preview').src = dataURI;
+                }
+            }
+        }
+    </script>
     <script type="module" src="../../../src/js/writeRecipe.js"></script>
     <script type="text/javascript" src="../../../src/js/writeRecipe_delete.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
