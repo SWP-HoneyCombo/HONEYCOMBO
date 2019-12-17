@@ -9,7 +9,7 @@ async function fn(recipeList, showResult, comment) {
         var articles = '';
         for (var i = 0; i < recipeList.items.length; i++) {
             var length = recipeList.items.length;
-            var imgSrc = '/images/' + recipeList.items[i].IMGFILENAME;
+            var imgSrc = recipeList.items[i].IMGFILENAME;
             var tagStr = recipeList.items[i].TAGCONTENTS;
             var subItemList = tagStr.split('#');
             var tempTitle = recipeList.items[i].TITLE;
