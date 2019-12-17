@@ -25,8 +25,8 @@ async function fn(recipeList, showResult, comment) {
                         <li id="recipeUser"><span>'+recipeList.items[i].USERID+'</span> 님의 레시피</li>\
                         <li id="recipeTitle">'+tempTitle+'</li>\
                         <li id="recipePrice">'+recipeList.items[i].TOTALPRICE+'원</li>\
-                        <li id="recipeItem"><a style="font-size: 0.9rem;">필요한 재료:</a>\
-                            '+subItemList.join('| ').slice(1,)+'\
+                        <li id="recipeItem"><a style="font-size: 0.9rem;">필요한 재료: </a>\
+                            '+subItemList.join(' #')+'\
                         </li>\
                     </article>';
         }

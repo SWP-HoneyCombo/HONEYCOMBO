@@ -57,15 +57,15 @@
         <!--recipeWriter-->
         <% if(isLoggedin && (userID == recipeWriter)) { %>
             <h4 class="text-center"><b>내가 작성한 레시피</b></h4>
-        <%} else{%>
-            <h4 class="text-center"><b><%= recipeWriter %> 님의 레시피</b></h4> <!--writer 변수 추가해야-->
-        <%}%>
+        <% } else{ %>
+            <h4 class="text-center" id="recipe_writer"><b><%= recipeWriter %> 님의 레시피</b></h4> <!--writer 변수 추가해야-->
+        <% } %>
         <hr id="hr-line">
 
         <!--thumnail-->
         <div class="row">
             <div class="col text-center my-3">
-                <img src="<%= imgSrc %>" alt="recipe_img" width="400" height="300"/>
+                <img src="<%= imgSrc %>" alt="recipe_img" id ="recipe_img" width="400" height="300"/>
             </div>
         </div>
 
@@ -348,28 +348,22 @@
 <script>
     Kakao.init('e49eeec2a8bf33e9b674f97efdfc5a3f');
     // // 카카오링크 버튼을 생성합니다. 처음 한번만 호출하면 됩니다.
+    var recipe_title = document.querySelector('.recipe-title').textContent;
+    var recipeImg = document.getElementById('recipe_img').src;
+    var recipe_writer = document.getElementById('recipe_writer').textContent.slice(0,-7);
+    var descript = recipe_writer+" 님의 "+recipe_title+" 레시피"
+
     function sendLink() {
         Kakao.Link.sendDefault({
             objectType: 'feed',
             content: {
-                title: '딸기 치즈 케익',
-                description: '#케익 #딸기 #삼평동 #카페 #분위기 #소개팅',
-                imageUrl: 'http://mud-kage.kakao.co.kr/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png',
+                title: recipe_title,
+                description: descript,
+                imageUrl: recipeImg,
                 link: {
-                    webUrl: 'https://localhost:3000/recipe/detailRecipe/'
+                    webUrl: 'https://localhost:3000/recipe/detailRecipe/'+recipe_title
                 }
             },
-            social: {
-                commentCount: 45,
-            },
-            buttons: [
-                {
-                    title: ' 앱으로 보기',
-                    link: {
-                        webUrl: 'https://developers.kakao.com'
-                    }
-                }
-            ]
         });
     }
 </script>
