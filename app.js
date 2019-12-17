@@ -26,6 +26,9 @@ app.use(express.static('public'))
 app.use(express.static('routes'))
 app.use(express.static('views'))
 app.use(express.static('public/images'))
+app.use(express.static('public/css'))
+app.use(express.static('public/src'))
+app.use(express.static('public/src/css'))
 
 // for get POST request
 app.use(bodyParser.json())

@@ -1,0 +1,213 @@
+@import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css);
+
+body{
+  font-family: 'NanumSquare', sans-serif;
+}
+
+.container {
+  width: 970px;
+  max-width: none !important;
+  font-family: 'NanumSquare', sans-serif;
+  margin: 0 auto;
+}
+
+.main{
+  width:65%;
+  margin: 0 auto;
+}
+
+.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+
+nav{
+  width: 75%;
+  margin: 0 auto;
+}
+
+ul li {
+  display: inline;
+  text-align: center;
+}
+
+.nav-a {
+  display: inline-block;
+  /* width: 50%;  */
+  padding: 0 0;
+  margin: 3rem 0 0 0;
+  text-decoration: none;
+  color: #333;
+}
+
+.form, .recipe, .recipe-time{
+  width:65%;
+  margin: 0 auto;
+}
+
+#nav_hr{
+ height: .25rem;
+ width: 50%;
+ margin: 0 0 0 6.8rem;
+ background: tomato;
+ border: none;
+}
+
+.form-control{
+  width: 20%;
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: orange !important;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(255,199,13,.25) !important;
+}
+
+.prod-basket{
+  width:100%;
+  height: auto;
+  border: 0.09375rem;
+  border-color: #fafafa;
+  padding: 1rem 1rem 2rem 1rem;
+  margin: 3rem 0 3rem 0  !important;
+  background-color: #fafafa;
+}
+
+.card{
+  width:9.375rem;
+  height:auto;
+}
+
+.card-title{
+    margin-bottom: 0.2rem !important;
+    height: 2rem;
+    font-family: sans-serif;
+}
+.card-body{
+    padding: 0.9rem !important;
+}
+
+.carousel-control-next, .carousel-control-prev{
+  width: 5% !important;
+}
+.carousel-inner{
+  margin: auto;
+  width: 95% !important;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  width: 0;
+  height: 0;
+  background-image: none;
+}
+
+.carousel-control-next-icon:after {
+  content: '>';
+  font-size: 3.4375rem;
+  color: #FDBF00;
+}
+
+.carousel-control-prev-icon:after {
+  content: '<';
+  font-size: 3.4375rem;
+  color: #FDBF00;
+}
+
+.image-upload>input {
+  display: none;
+}
+
+.yellow{
+  color: #FFDA2D;
+}
+
+#myItemList{
+  margin: 0 auto;
+}
+
+.diff{
+  width: 3.125rem;
+  height: 2.5rem;
+  color: white;
+}
+
+hr{
+  width:105%;
+  height: 3.125rem;
+  text-align: center;
+  color: #111111;
+}
+
+textarea.form-control{
+  width: 100%;
+  line-height: 2 !important;
+  font-family: 'NanumSquare', sans-serif;
+  padding: 1.25rem;
+}
+
+footer {
+  width:70%;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  margin: 0 auto;
+}
+
+footer p {
+  margin-bottom: .25rem;
+}
+
+
+#signup, #dropout{
+  background-color: #FF9100;
+  border: none;
+}
+
+#login, #logout {
+  background-color: #FFDA2D;
+  border: none;
+}
+
+#write_submit{
+  background-color: #FFDA2D;
+  border: none;
+  float: right;
+  font-size: 1.2rem;
+}
+
+#search{
+  background-color: #FF641A;
+  border: none;
+  font-size: 0.8rem;
+}
+#prod_search{
+  width:15%;
+}
+#rcp_time{
+  width:25%;
+}
+#youtube_url{
+  width: 80%;
+}
+/* #step1, #step2, #step3, #step4, #step5{
+  width: 80%;
+} */
+#add{
+  background-color: #F57C20;
+  border: none;
+  width: 6.25rem;
+  height: 1.875rem;
+}
+
+#delete{
+  border: none;
+  padding-left: 1rem;
+  margin-left: 0.2rem;
+}
+
+#hr-line{
+  width:80%;
+}
+
+
+.featurette-divider {
+  margin-top: 5rem; /* Space out the Bootstrap <hr> more */
+}

@@ -3,23 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="c2dfc577-40d0-48ab-9918-a21d773c3d30" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/auth/dropout.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/auth/dropout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/auth/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/auth/login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/auth/logout.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/auth/logout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/auth/signup.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/auth/signup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/dbConnect.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/dbConnect.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/product/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/product/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/recipe/detailRecipe.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/recipe/detailRecipe.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/recipe/mainRecipe.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/recipe/mainRecipe.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/recipe/writeRecipe.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/recipe/writeRecipe.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/log-sess/dropOut.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/log-sess/dropOut.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/log-sess/login.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/log-sess/login.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/log-sess/signup.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/log-sess/signup.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/productView/productMain.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/productView/productMain.ejs" afterDir="false" />
+<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/public/src/js/detailRecipe.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/src/js/detailRecipe.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/recipeView/detailRecipe.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/recipeView/detailRecipe.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/recipeView/mainRecipe.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/recipeView/mainRecipe.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/recipeView/writeRecipe.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/recipeView/writeRecipe.ejs" afterDir="false" />
+=======
+<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/routes/recipe/writeRecipe.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/recipe/writeRecipe.js" afterDir="false" />
+=======
+>>>>>>> 2fbb49f00dc2fce2363eff4b688f3e8930b263ad
+>>>>>>> 9210605a5386e0a9b79f1b2b545fbc54e626b91e
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -75,10 +67,13 @@
     </option>
   </component>
   <component name="RunManager" selected="Node.js.app.js">
-    <configuration name="signup.ejs" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Honey-Combo/views/log-sess/signup.ejs" useBuiltInWebServerPort="true">
+    <configuration name="app.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/app.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
-    <configuration name="app.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/app.js" working-dir="$PROJECT_DIR$">
+    <configuration name="dbConnect.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/routes/dbConnect.js" working-dir="$PROJECT_DIR$/routes">
+      <method v="2" />
+    </configuration>
+    <configuration name="detailRecipe.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/routes/recipe/detailRecipe.js" working-dir="$PROJECT_DIR$/routes/recipe">
       <method v="2" />
     </configuration>
     <configuration name="index.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/routes/index.js" working-dir="$PROJECT_DIR$/routes">
@@ -87,23 +82,13 @@
     <configuration name="logout.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/routes/auth/logout.js" working-dir="$PROJECT_DIR$/routes/auth">
       <method v="2" />
     </configuration>
-    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/package.json" />
-      <command value="run" />
-      <scripts>
-        <script value="start" />
-      </scripts>
-      <node-interpreter value="project" />
-      <envs />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Node.js.app.js" />
-        <item itemvalue="Node.js.logout.js" />
-        <item itemvalue="JavaScript Debug.signup.ejs" />
-        <item itemvalue="npm.start" />
         <item itemvalue="Node.js.index.js" />
+        <item itemvalue="Node.js.detailRecipe.js" />
+        <item itemvalue="Node.js.dbConnect.js" />
+        <item itemvalue="Node.js.logout.js" />
       </list>
     </recent_temporary>
   </component>
@@ -126,6 +111,20 @@
       <workItem from="1574596668554" duration="16143000" />
       <workItem from="1574641927033" duration="72534000" />
       <workItem from="1574820494973" duration="121000" />
+      <workItem from="1575176102125" duration="505000" />
+      <workItem from="1575176633032" duration="4103000" />
+      <workItem from="1575215604170" duration="5178000" />
+      <workItem from="1575276931974" duration="167000" />
+<<<<<<< HEAD
+      <workItem from="1575340555631" duration="13732000" />
+      <workItem from="1575358379259" duration="9534000" />
+=======
+<<<<<<< HEAD
+      <workItem from="1575340555631" duration="13732000" />
+=======
+      <workItem from="1575340555631" duration="7674000" />
+>>>>>>> 2fbb49f00dc2fce2363eff4b688f3e8930b263ad
+>>>>>>> 9210605a5386e0a9b79f1b2b545fbc54e626b91e
     </task>
     <servers />
   </component>
@@ -137,7 +136,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

@@ -1,182 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <title>HoneyCombo</title>
+    <link rel="stylesheet" href="/src/css/recipeDetail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonsymous">
+<!--    for kakao API-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width"/>
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 </head>
 <body>
-<h1>레시피 상세보기 페이지</h1>
-<nav>
-    <!--    login, signup, logout, product, reciped -->
-    <ul>
-        <li><a href="/product/main">상품</a></li>
-        <li><a href="/recipe/mainRecipe">레시피</a></li>
-    </ul>
+<header>
+    <div class="container d-flex mt-2">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="p-2">
+                <a href="/index">
+                    <div class='logo-wrapper'>
+                        <img class='img' src="/static/logo.png" width="200" height="90">
+                    </div>
+                </a>
+            </div>
+            <div class="p-2">
+                <ul>
+                    <li id="nav_list"><a class="nav-a one text-dark ml-2 mr-5" href="/product/main" style="text-decoration:none"><h4>상품</h4></a></li>
+                    <li id="nav_list"><a class="nav-a two text-dark ml-3" href="/recipe/mainRecipe" style="text-decoration:none"><h4>레시피</h4></a></li>
+                    <hr id="nav_hr">
+                </ul>
+            </div>
 
-    <div class="auth">
-        <% if (isLoggedin)  { %>
-            <div>
-                <h5><%= userID %>님 안녕하세요!</h5>
-                <a href="/auth/logout">logout</a>
-                <a href="/auth/dropout">drop out</a>
+            <div class="ml-auto p-4 mt-2">
+                <% if (isLoggedin)  { %>
+                    <h6 class="d-inline mt-1"><%= userID %>님 반가워요 :)</h6>&nbsp;
+                    <a class="btn btn-primary" id="logout" href="/auth/logout">로그아웃</a>
+                    <a class="btn btn-primary" id="dropout" href="/auth/dropout">회원탈퇴</a>
+                <% } %>
+                <% if (!isLoggedin)  { %>
+                    <div>
+                        <a class="btn btn-primary" id="login" href="/auth/login">로그인</a>
+                        <a class="btn btn-primary" id="signup" href="/auth/signup">회원가입</a>
+                    </div>
+                <% } %>
             </div>
-        <% } %>
-        <% if (!isLoggedin) { %>
-            <div>
-                <li><a href="/auth/login">login</a></li>
-                <li><a href="/auth/signup">signup</a></li>
-            </div>
-        <% } %>
+        </nav>
     </div>
-</nav>
-<section class="recipeInfo">
-    <section class="thumnail">
-        <% var imgSrc = '/images/' + items.recipeData[0].imgPath %>
+</header>
+<main>
+    <div class="container recipeInfo" id="">
+        <% var imgSrc = items.recipeData[0].imgPath %>
         <% var recipeTitle = items.recipeData[0].title %>
-        <ul>
-            <li>
-                <img src="<%= imgSrc %>" alt="Submit Form"/>
-                <span>TITLE : <%= recipeTitle %></span>
-            </li>
-        </ul>
-    </section>
-    <section class="products">
-        <% for ( var i = 0; i < items.usedProduct.length; i++){ %>
-            <article>
-                <!--TODO : change source path and change IMGFILENAME to format contained file-->
-                <% var imgSrc = '/images/' + items.usedProduct[i].imgPath %>
-                <% var itemName = items.usedProduct[i].itemName %>
-                <% var itemPrice = items.usedProduct[i].itemPrice %>
+        <% var recipeWriter = items.recipeData[0].writerID %>
 
-                <li>
-                    <img src="<%= imgSrc %>" alt="item Img"/>
-                    <span><%= itemPrice %>won</span>
-                    <span><%= itemName %></span>
-                </li>
-            </article>
+        <!--recipeWriter-->
+        <% if(isLoggedin && (userID == recipeWriter)) { %>
+            <h4 class="text-center"><b>내가 작성한 레시피</b></h4>
+        <% } else{ %>
+            <h4 class="text-center" id="recipe_writer"><b><%= recipeWriter %> 님의 레시피</b></h4> <!--writer 변수 추가해야-->
         <% } %>
-    </section>
-    <section class="recipeRating">
-        평점 : <%= avgRate %>
-        가격 : <%= items.recipeData[0].totalPrice %>
-    </section>
-    <section class="SNS-sharing">
-        Insta/Kakao/Facebook...
-    </section>
-    <section class="mainContents">
+        <hr id="hr-line">
 
-    </section>
-    <section class="comments">
-        <p>댓글</p>
-        <ul>
-            <li class="eachComment">
+        <!--thumnail-->
+        <div class="row">
+            <div class="col text-center my-3">
+                <img src="<%= imgSrc %>" alt="recipe_img" id ="recipe_img" width="400" height="300"/>
+            </div>
+        </div>
+
+        <div class="text-center my-3">
+            <h4 class="recipe-title"><%= recipeTitle %></h4>
+        </div>
+
+        <!--products-->
+        <div class="recipeIngredient">
+            <label class="col-xs ml-4 col-form-label" style="font-size:1.3rem">레시피 재료</label>
+            <!--products-->
+            <div class="recipe-basket">
+                <div class="row mx-5">
+                    <% var products = items.usedProduct %>
+                    <% for (var i=0; i<products.length;i++) {%>
+                        <div class="card text-align align-self-center mx-2">
+                            <div class="card-body text-center">
+                                <h6 class="card-title my-2 mx-auto"><%= products[i].itemName %></h6>
+                                <img class="rounded mx-auto d-block" width=110 height=110 src="<%= products[i].imgPath %>">
+                                <h6 class="card-title my-2 ml-auto" style="color: rgb(255, 145, 0);"><%= products[i].itemPrice%>원</h6>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+            <hr>
+        </div>
+
+        <!--recipeInfo-->
+        <div class="recipeInfos">
+            <!--평점 가격-->
+            <div class="row justify-content-start">
+                <div class="col-xs ml-3">
+                    <span style="font-size:1.3rem">평점</span>
+                    <span class="mx-5" style="font-size:1.5rem">|</span>
+                </div>
+
+                <% if (avgRate != '평점 미등록'){ %>
+                    <div class="col-xs mx-3 align-self-center">
+                        <% var star = Math.floor(avgRate) %>
+                        <% if((avgRate - star) >= 0.5){ %> <!--0.5이상부터 0.999까지 .5-->
+                            <% for(var i = 0; i < star; i++) { %>
+                                <span class="fa fa-star checked"></span>
+                            <% } %>
+                                <span class="fa fa-star-half checked"></span>
+                        <% }else{ %>                       <!--0이상부터 0.499까지 소수점 버림-->
+                            <% for(var i = 0; i < star; i++) { %>
+                                <span class="fa fa-star checked"></span>
+                            <% } %>
+                        <% } %>
+                    </div>
+
+                <div class="col-xs mx-2 mr-5 align-self-center">
+                    <span id="rate" style="font-size:1.3rem"><%= avgRate.toFixed(1) %></span>
+                    <span style="font-size:1.3rem">점</span>
+                </div>
+                <% } %>
+
+                <!-- 평가 아직 없는 경우 -->
+                <% if (avgRate == '평점 미등록'){ %>
+                    <div class="col-xs mx-3 mr-5 align-self-center">
+                      <span style="font-size:1.3rem">아직 평가가 없어요ㅜㅜ</span>
+                    </div>
+                <% } %>
+
+                <div class="col-xs ml-5">
+                    <span style="font-size:1.3rem">가격 </span>
+                </div>
+                <div class="col-xs mx-5">
+                    <span style="font-size:1.5rem">|</span>
+                </div>
+                <div class="col-xs mx-3 align-self-center">
+                    <span id="price" style="font-size:1.3rem"><%= items.recipeData[0].totalPrice %></span>
+                    <span style="font-size:1.3rem">원</span>
+                </div>
+            </div>
+
+            <hr>
+            <!--난이도 소요시간-->
+            <div class="row justify-content-start">
+                <%var diff = items.recipeData[0].difficulty%>
+                <% if (diff == "high") {
+                    diff = "상";
+                }else if (diff == "mid"){
+                    diff = "중";
+                    }else if (diff =="low") {
+                    diff = "하";
+                }%>
+
+                <div class="col-xs ml-3 mr-5">
+                    <span class="mr-1" style="font-size:1.3rem">난이도</span>
+                    <span class="mx-4" style="font-size:1.5rem">|</span>
+                    <span class="mx-5" style="font-size:1.3rem"><b><%= diff %></b></span>
+                </div>
+
+                <div class="col-xs ml-5">
+                    <div class="mx-5">
+                        <span class="ml-4" style="font-size:1.3rem">소요시간 </span>
+                        <span class="mx-5" style="font-size:1.5rem">|</span>
+                        <% var min = items.recipeData[0].totalTime %>
+                        <span class="ml-3" id="time" style="font-size:1.3rem"><%= min %></span>
+                        <span style="font-size:1.3rem">분</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <!--공유-->
+            <div class="row justify-content-start">
+                <!--SNS-sharing-->
+                <div class="col-xs align-self-center ml-3">
+                    <span style="font-size:1.3rem">공유</span>
+                    <span class="mx-5" style="font-size:1.5rem">|</span>
+                    <a id="kakao-link-btn" href="javascript:sendLink()"><img class="ml-3" src="/static/kakao.png" width=30 height=30></a>
+                </div>
+            </div>
+            <hr>
+        </div>
+
+        <!--youtube-->
+        <div class="embed-responsive embed-responsive-16by9 my-5">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/<%=items.recipeData[0].videoUrl%>" allowfullscreen></iframe> <!--youtube 변수 들어가야-->
+        </div>
+
+        <!--mainContents-->
+        <div class="recipeContent">
+            <div class="recipe mt-4 py-5 pl-5 pr-3">
+                <div class="row mx-3 my-2">
+                    <img src="/static/whisk.png" width="40" height="40" alt="">
+                    <span class="row ml-3 mb-5 mt-1 text-left align-center" style="font-size:1.5rem">조리순서</span>
+                </div>
+
+                <div class="row mx-3 my-2">
+                    <img src="/static/one.png" class="number-info" alt="one">
+                    <p class="recipe-content ml-5 mt-2" id="step1_content">
+                        <%= items.recipeData[0].content1 %>
+                    </p>
+                </div>
+
+                <% if (items.recipeData[0].content2 != ''){ %>
+                    <div class="row mx-3 my-2">
+                        <img src="/static/two.png" class="number-info" alt="two">
+                        <p class="recipe-content ml-5 mt-2" id="step2_content">
+                            <%= items.recipeData[0].content2 %>
+                        </p>
+                    </div>
+                <% } %>
+
+                <% if (items.recipeData[0].content3 != ''){ %>
+                    <div class="row mx-3 my-2">
+                        <img src="/static/three.png" class="number-info" alt="three">
+                        <p class="recipe-content ml-5 mt-2" id="step3_content">
+                            <%= items.recipeData[0].content3 %>
+                        </p>
+                    </div>
+                <% } %>
+
+                <% if (items.recipeData[0].content4 != ''){ %>
+                    <div class="row mx-3 my-2">
+                        <img src="/static/four.png" class="number-info" alt="four">
+                        <p class="recipe-content ml-5 mt-2" id="step4_content">
+                            <%= items.recipeData[0].content4 %>
+                        </p>
+                    </div>
+                <% } %>
+
+                <% if (items.recipeData[0].content5 != ''){ %>
+                    <div class="row mx-3 my-2">
+                        <img src="/static/five.png" class="number-info" alt="five">
+                        <p class="recipe-content ml-5 mt-2" id="step5_content">
+                            <%= items.recipeData[0].content5 %>
+                        </p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="text-center my-3">
+            <a href="/recipe/mainRecipe">
+                <button class="btn btn-outline-primary my-3" id="back_to_list">레시피 목록으로 돌아가기</button>
+            </a>
+        </div>
+
+        <!--comments-->
+        <h4 class="text-center mt-5"><b>댓글</b></h4>
+        <div class="commetList">
+            <hr>
+            <div class="comment-container">
+                <% if(!isLoggedin) { %> <!--로그인 안 한 경우-->
                 <% for(var i = 0; i < items.comment.length; i++) { %>
-                    <% var commentIdx = String(i) %>
                     <% var userId = items.comment[i].userId %>
                     <% var commentContents = items.comment[i].commentContents %>
                     <% var rate = items.comment[i].rate %>
-                    <%= userId %>&nbsp; | <%= commentContents %>&nbsp; | <%= rate %>
-                    <% if(isLoggedin && (userId == userID)) { %>
-            <li class="modifyComment">
-                <button name="">수정</button>
-            </li>
-            <li class="deleteComment">
-                <button name="">삭제</button>
-            </li>
-            <% }} %>
-            </li>
+                        <!--댓글 하나-->
+                        <div class="row comment-row">
+                            <div class="col-1 ml-5">
+                                <h5 id="user_id"><%= userId %></h5>
+                            </div>
 
-            <h4>댓글쓰기</h4>
-            <li class="writeComment">
-                <form action="" method="post">
-                    <input type="text" name="commentWrite">
-                    <input type="number" name="usersRate">
-                </form>
-                <button name="submitComment">등록</button>
-            </li>
+                            <div class="col-6">
+                                <h5 id="my_comment" class="ml-3"><%= commentContents %></h5>
+                            </div>
 
-        </ul>
-    </section>
-    <section>
-        <a href="/recipe/mainRecipe">목록보기</a>
-        <a href="/recipe/writeRecipe">글쓰기</a>
-    </section>
-</section>
+                            <div class="col-2 ml-3 align-self-center">
+                                <% for(var j = 0; j < rate; j++) { %>
+                                <span class="fa fa-star checked"></span>
+                                <% } %>
+                            </div>
+                            <hr>
+                        </div>
+                <% }}else{ %> <!--로그인 한 경우-->
+                    <% var isCommentWritten = 0 %>
+                    <% for(var i = 0; i < items.comment.length; i++) { %>
+                        <% var userId = items.comment[i].userId %>
+                        <% if(userId == userID) {isCommentWritten = 1;} %>
+                        <% var commentContents = items.comment[i].commentContents %>
+                        <% var rate = items.comment[i].rate %>
+                        <!--댓글 하나-->
+                        <div class="row comment-row">
+                            <div class="col-1 ml-5">
+                                <h5 id="user_id"><%= userId %></h5>
+                            </div>
 
-<!--댓글 수정 및 등록을 위한 스크립트-->
+                            <div class="col-6">
+                                <h5 id="my_comment" class="ml-3"><%= commentContents %></h5>
+                            </div>
+
+                            <div class="col-2 ml-3 align-self-center">
+                                <% for(var j = 0; j < rate; j++) { %>
+                                    <span class="fa fa-star checked"></span>
+                                <% } %>
+                            </div>
+                            <!--내 댓글인 경우에만 뜸-->
+                            <% if(isCommentWritten == 1 ) { %>
+                            <button class="btn btn-primary mx-2" id="comment_delete" name="deleteComment">삭제</button>
+                                <% isCommentWritten = 0 %>
+                            <% } %>
+                            <hr>
+                        </div>
+                  <%}}%>
+            </div>
+
+            <!--댓글 작성하기: 유저 댓글 없음 -->
+            <% if(isCommentWritten == 0) { %>
+            <form class="comment mt-4" action="" method="post">
+                <div class="form-group row justify-content-center align-items-center">
+                    <label class="col-1 col-form-label ml-4" for="cmt_input"><h5>작성</h5></label>
+                    <input type="hidden" name="recipeTitle" value="<%=recipeTitle%>">
+                    <input type="text" name="commentWrite" style="font-size:1.2rem" id="cmt_input" class="form-control col-sm-7" placeholder="코멘트를 30자 이내로 남겨주세요 :)">
+                    <div class="rating-group ml-4">
+                      <span class="star-rating star-5">
+                        <input type="radio" name="usersRate" value="1"><i></i>
+                        <input type="radio" name="usersRate" value="2"><i></i>
+                        <input type="radio" name="usersRate" value="3"><i></i>
+                        <input type="radio" name="usersRate" value="4"><i></i>
+                        <input type="radio" name="usersRate" value="5"><i></i>
+                      </span>
+                    </div>
+                    <input type="button" id="commet_submit" name="writeComment" value="제출" class="btn btn-primary ml-4 align-self-center">
+                </div>
+            </form>
+            <%}%>
+        </div>
+    </div>
+
+    <footer class="text-muted text-center">
+        <hr class="featurette-divider ">
+        <p class="float-right">
+            <a href="#">Back to top</a>
+        </p>
+        <p class="text-left">오픈SW플랫폼 Team17 이소망, 이채은, 최희조</p>
+    </footer>
+</main>
+
 <script>
-    document.querySelector('.comments').addEventListener('click', function (e) {
-        let url, method, data, fn;
-        const target = e.target;
-        const li = target.closest('li');
-        const eachComment = document.querySelector(".eachComment");
-        const type = li.className;
-        const title = '<%= recipeTitle %>'
+    document.querySelector(".recipeInfo").id = '<%= recipeTitle %>';
+</script>
 
-        if (target.tagName !== "BUTTON") return;
+<!--kakao link api base code-->
+<script>
+    Kakao.init('e49eeec2a8bf33e9b674f97efdfc5a3f');
+    // // 카카오링크 버튼을 생성합니다. 처음 한번만 호출하면 됩니다.
+    var recipe_title = document.querySelector('.recipe-title').textContent;
+    var recipeImg = document.getElementById('recipe_img').src;
+    var recipe_writer = document.getElementById('recipe_writer').textContent.slice(0,-7);
+    var descript = recipe_writer+" 님의 "+recipe_title+" 레시피"
 
-        switch (type) {
-            case "writeComment":
-                url = "/recipe/detailRecipe/writeComment"
-                method = "POST"
-                // all elements select in form tag by name - maxPrice, minPrice
-                let inputs = [].slice.call(document.querySelector("form").elements);
-                data = inputs.reduce(function (pre, next) {
-                    pre[next.name] = next.value;
-                    return pre;
-                }, {});
-                data.recipeTitle = title;
-
-                fn = function (writeComment) {
-                    if (writeComment.result === 1) {
-                        console.log(writeComment)
-                        // TODO : redirect to rendering new comment
-                        // eachComment.innerHTML = writeComment.userId + '\t' + writeComment.contents + '\t' + writeComment.rate;
-                        window.location.href = '/recipe/detailRecipe/viewDetail/' + title
-                    } else {
-                        alert(writeComment.errMsg)
-                    }
+    function sendLink() {
+        Kakao.Link.sendDefault({
+            objectType: 'feed',
+            content: {
+                title: recipe_title,
+                description: descript,
+                imageUrl: recipeImg,
+                link: {
+                    webUrl: 'https://localhost:3000/recipe/detailRecipe/'+recipe_title
                 }
-                break;
-            case "deleteComment":
-                url = "/recipe/detailRecipe/deleteComment/" + title
-                method = "DELETE"
-
-                fn = function (deleteComment) {
-                    if (deleteComment.result === 1) {
-                        console.log(deleteComment)
-                        alert(deleteComment.successMsg)
-                        window.location.href = '/recipe/detailRecipe/viewDetail/' + title
-                    } else {
-                        //TODO : redirection
-                        alert(deleteComment.errMsg)
-                    }
-                }
-                break;
-        }
-        sendNewComment(url, method, data, fn)
-    })
-
-    // @data : json format
-    function sendNewComment(url, method, data, fn) {
-        const xhr = new XMLHttpRequest()
-        xhr.open(method, url)
-
-        if (data) {
-            data = JSON.stringify(data)
-            console.log(data)
-            xhr.setRequestHeader('Content-Type', "application/json")
-        } else {
-            data = null
-        }
-        xhr.send(data)
-
-        xhr.addEventListener('load', function () {
-            const result = JSON.parse(xhr.responseText)
-            fn(result)
-        })
+            },
+        });
     }
 </script>
+<script type="module" src="/js/detailRecipe.js"></script>
 
 </body>
 </html>

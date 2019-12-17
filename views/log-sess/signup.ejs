@@ -1,18 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>HoneyCombo</title>
+    <link rel="stylesheet" type="text/css" href="/src/css/login.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
+
 <body>
-<form action="/auth/signup" method="post">
-    ID : <input type="text" name="ID"/> <br/>
-    PW : <input type="password" name="PW"/> <br/>
-    <input type="submit" value="회원가입">
-</form>
-<p><a href="/product/main">Home</a></p>
+    <header>
+        <div class="container d-flex mt-2">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="p-2">
+                    <a href="/index">
+                        <div class='logo-wrapper'>
+                            <img class='img' src="/static/logo.png" width="200" height="90">
+                        </div>
+                    </a>
+                </div>
+                <div class="p-2">
+                    <ul>
+                        <li><a class="nav-a one text-dark ml-2 mr-5" href="/product/main" style="text-decoration:none"><h4>상품</h4></a></li>
+                        <li><a class="nav-a two text-dark ml-3" href="/recipe/mainRecipe" style="text-decoration:none"><h4>레시피</h4></a></li>
+                    </ul>
+                </div>
 
-<section><%= message %></section>
-
+                <div class="ml-auto p-4 mt-2">
+                    <div>
+                        <a class="btn btn-primary" id="login" href="/auth/login">로그인</a>
+                        <a class="btn btn-primary" id="signup" href="/auth/signup">회원가입</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main class="container text-center">
+        <h3 class="mt-5">꿀조합러가 될 준비되셨나요?</h3>
+        <h3 class="text-center">환영합니다 ^0^</h3>
+        <hr>
+        <form class="form-auth" action="/auth/signup" method="post">
+            <img class="mb-4" src="/static/signup.png" alt="" width="72" height="72">
+            <h2 class="mb-3 font-weight-normal">회원가입</h2>
+            <input class="logininput my-1" type="text" placeholder="아이디를 입력해주세요" name="ID" /> <br />
+            <input class="logininput my-1" type="password" placeholder="비밀번호를 입력해주세요" name="PW" /> <br />
+            <div class="logResult my-1"><%= message %></div>
+            <input class="loginBtn" type="submit" value="가입하기">
+        </form>
+    </main>
+    <footer class="text-muted">
+        <div class="container">
+            <hr class="featurette-divider">
+            <p class="float-right">
+                <a href="/index">Back to Home</a>
+            </p>
+            <p>오픈SW플랫폼 Team17 이소망, 이채은, 최희조</p>
+        </div>
+    </footer>
 </body>
+
 </html>

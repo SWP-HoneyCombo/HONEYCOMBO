@@ -3,144 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <title>HoneyCombo</title>
+    <link rel="stylesheet" type="text/css" href="/src/css/productMain.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-<h3>메인 상품 페이지</h3>
-<nav>
-    <!--    login/signup/logout/product/reciped -->
-    <ul>
-        <li><a href="/product/main">상품</a></li>
-        <li><a href="/recipe/mainRecipe">레시피</a></li>
-    </ul>
-
-    <div class="auth">
-        <% if (isLoggedin)  { %>
-        <div>
-            <h5><%= userID %>님 안녕하세요!</h5>
-            <a href="/auth/logout">logout</a>
-            <a href="/auth/dropout">drop out</a>
-        </div>
-        <% } %>
-        <% if (!isLoggedin) { %>
-            <div>
-                <li><a href="/auth/login">login</a></li>
-                <li><a href="/auth/signup">signup</a></li>
+<header>
+    <div class="container d-flex mt-2">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="p-2">
+                <a href="/index">
+                    <div class='logo-wrapper'>
+                        <img class='img' src="/static/logo.png" width="200" height="90">
+                    </div>
+                </a>
             </div>
-        <% } %>
+            <div class="p-2">
+                <ul>
+                    <li id="nav_list"><a class="nav-a one text-dark ml-2 mr-5" href="/product/main" style="text-decoration:none"><h4>상품</h4></a></li>
+                    <li id="nav_list"><a class="nav-a two text-dark ml-3" href="/recipe/mainRecipe" style="text-decoration:none"><h4>레시피</h4></a></li>
+                    <hr id="nav_hr">
+                </ul>
+            </div>
+
+            <div class="ml-auto p-4 mt-2">
+                <% if (isLoggedin)  { %>
+                    <h6 class="d-inline mt-1"><%= userID %>님 반가워요 :)</h6>&nbsp;
+                    <a class="btn btn-primary" id="logout" href="/auth/logout">로그아웃</a>
+                    <a class="btn btn-primary" id="dropout" href="/auth/dropout">회원탈퇴</a>
+                <% } %>
+                <% if (!isLoggedin)  { %>
+                    <div>
+                        <a class="btn btn-primary" id="login" href="/auth/login">로그인</a>
+                        <a class="btn btn-primary" id="signup" href="/auth/signup">회원가입</a>
+                    </div>
+                <% } %>
+            </div>
+        </nav>
     </div>
-</nav>
+</header>
+<main>
+    <div class="container showWrap">
+        <!--상품 검색-->
+        <div class="product-Search text-center">
+            <div class="row justify-content-center mt-5 mb-3">
+                <img src="/static/product_icon.png" width="50" height="50">
+                <h4 class="small-title align-center mx-3 mt-2">편의점 상품</h4>
+            </div>
+            <div class="row justify-content-center">
+                <form class="form-inline">
+                    <input type="text" id="itemSearchName" class="form-control" placeholder="상품명을 입력하세요">
+                </form>
+                <button class="btn btn-primary" id="searchButton" name="searchButton">검색</button>
+            </div>
+        </div>
+        <!--상품 필터링-->
+        <div class="product-sort mt-5 mb-1 align-self-center">
+            <div class="row justify-content-center">
+                <div class="col-xs align-self-center">
+                    <img src="/static/filter.png" width="32" height="32">
+                    <h5 class="align-center mx-3 mt-2 d-inline">필터</h5>
+                </div>
+                <div class="col-xs ml-5 align-self-center">
+                    <span style="font-size:1.2rem">편의점별</span>
+                    <button class="btn btn-default ml-2" name="CU"><img src="/static/cu.png" width=60 height=40 alt="cu_logo" name="CU"></button>
+                    <button class="btn btn-default" name="GS"><img src="/static/gs25.png" width=72 height=28 alt="gs_logo" name="GS"></button>
+                </div>
+                <div class="col-xs ml-5 align-self-center">
+                    <span style="font-size:1.2rem">가격순</span>
+                    <button class="btn btn-outline-primary ml-3" name="high">높은 가격 순</button>
+                    <button class="btn btn-outline-primary" name="low">낮은 가격 순</button>
+                </div>
+            </div>
+        </div>
+        <!--상품 나열-->
+        <div class="product-content">
+            <hr>
+            <div class="defaultResult mt-2">
+                <% if(items != null && items.length > 0){ %>
+                <ul>
+                    <% for ( var i = 0; i < items.length; i++){ %>
+                        <article id="item" class="mx-4 my-5">
+                            <!--TODO : change source path and change IMGFILENAME to format contained file-->
+                            <% var imgSrc = items[i].IMGFILENAME %>
+                            <% console.log(imgSrc) %>
+                            <!--<h4><%= i %>번째 상품</h4>-->
+                            <img src=<%= imgSrc %>>
+                            <li id="itemCompany"><%= items[i].COMPANY %></li>
+                            <li id="itemName"><%= items[i].ITEMNAME %></li>
+                            <li id="itemPrice"><%= items[i].ITEMPRICE %>원</li>
+                            <!--<li><%= items[i].REGISTRATIONDATE %></li>-->
+                            <br>
+                        </article>
+                    <% } %>
+                    <% } else { %>
+                        <p>상품 없음</p>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </div>
+<!--    <footer class="text-muted">-->
+<!--        <div class="container">-->
+<!--            <hr class="featurette-divider">-->
+<!--            <p class="float-right">-->
+<!--                <a href="#">Back to top</a>-->
+<!--            </p>-->
+<!--            <p class="float-left">오픈SW플랫폼 Team17 이소망, 이채은, 최희조</p>-->
+<!--        </div>-->
+<!--    </footer>-->
+</main>
 
-<section class="showWrap">
-    <ul>
-        <!--TODO: if text input area is empty, blocking button at front and don't send request to server-->
-        <li class="productSearch">
-            <input type="text" name="itemName">
-            <button>검색하기</button>
-        </li>
-        <li class="companySort">
-            <button name="GS">GS</button>
-            <button name="CU">CU</button>
-            <button name="7-Eleven">7-Eleven</button>
-        </li>
-        <li class="priceSort">
-            <!--            이 중 하나만 먼저-->
-            <button>인기상품순</button>
-            <button>최신등록순</button>
-            <button>낮은가격순</button>
-            <button>높은가격순</button>
-        </li>
-    </ul>
-    <!--TODO: show default result product list using 'see more' button-->
-    <section class="defaultResult">
-        <% if(items != null && items.length > 0){ %>
-        <ul>
-            <% for ( var i = 0; i < items.length; i++){ %>
-                <article>
-                    <!--TODO : change source path and change IMGFILENAME to format contained file-->
-                    <% var imgSrc = '/images/' + items[i].IMGFILENAME %>
-                    <% console.log(imgSrc) %>
-                    <h4><%= i %>번째 상품</h4>
-                    <li><%= items[i].ITEMNAME %></li>
-                    <li><%= items[i].ITEMPRICE %></li>
-                    <li><%= items[i].COMPANY %></li>
-                    <li><%= items[i].REGISTRATIONDATE %></li>
-                    <li><img src=<%= imgSrc %>></li>
-                    <br>
-                </article>
-            <% } %>
-            <% } else { %>
-                <p>상품 없음</p>
-            <% } %>
-        </ul>
-    </section>
-</section>
-
-<script>
-    document.querySelector('.showWrap').addEventListener('click', function (e) {
-        let url, method, data, fn;
-        const target = e.target;
-        const li = target.closest('LI');
-        const showResult = document.querySelector(".defaultResult");
-        const type = li.className;
-
-        if (target.tagName !== "BUTTON") return;
-
-        switch (type) {
-            case "productSearch":
-                url = "/product/main/search/" + li.getElementsByTagName("input")[0].value;
-                method = "GET"
-                fn = function (productList) {
-                    if (productList.result === 1) {
-                        console.log(productList.items)
-                        // TODO : show result in default section
-                        for (var i = 0; i < productList.items.length; i++) {
-                            showResult.innerHTML = productList.items[i].ITEMNAME;
-                        }
-                    } else {
-                        showResult.innerHTML = "일치하는 상품 이름 없음"
-                    }
-                }
-                break;
-
-            case "companySort":
-                var companyName = target.name
-                url = "/product/main/classify/" + companyName
-                method = "GET"
-                fn = function (productByCompany) {
-                    if (productByCompany.result === 1) {
-                        console.log(productByCompany.items)
-                        // TODO : show result in default section
-                        for (var i = 0; i < productByCompany.items.length; i++) {
-                            showResult.innerHTML = productByCompany.items[i].ITEMNAME;
-                        }
-                    } else {
-                        showResult.innerHTML = "회사별 상품 결과 없음"
-                    }
-                }
-                break;
-        }
-        sendAjax(url, method, data, fn)
-    })
-
-    // @data : json format
-    function sendAjax(url, method, data, fn) {
-        const xhr = new XMLHttpRequest()
-        xhr.open(method, url)
-
-        if (data) {
-            data = JSON.stringify(data)
-            xhr.setRequestHeader('Content-Type', "application/json")
-        } else {
-            data = null
-        }
-        console.log(xhr)
-        xhr.send(data)
-
-        xhr.addEventListener('load', function () {
-            const result = JSON.parse(xhr.responseText)
-            fn(result)
-        })
-    }
-</script>
 </body>
+<script type="module" src="/src/js/productMain.js"></script>
 </html>

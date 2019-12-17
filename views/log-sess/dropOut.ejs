@@ -3,54 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>HoneyCombo</title>
+    <link rel="stylesheet" type="text/css" href="/src/css/login.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-<form action="/auth/dropout" method="post">
-    check PW : <input type="password" name="inputPW"/> <br/>
-</form>
-<button class="dropoutBtn">회원탈퇴</button>
-<p><a href="/product/main">Home</a></p>
+<header>
+    <div class="container d-flex mt-2">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="p-2">
+                <a href="/index">
+                    <div class='logo-wrapper'>
+                        <img class='img' src="/static/logo.png" width="200" height="90">
+                    </div>
+                </a>
+            </div>
+            <div class="p-2">
+                <ul>
+                    <li><a class="nav-a one text-dark ml-2 mr-5" href="/product/main" style="text-decoration:none"><h4>상품</h4></a></li>
+                    <li><a class="nav-a two text-dark ml-3" href="/recipe/mainRecipe" style="text-decoration:none"><h4>레시피</h4></a></li>
+                </ul>
+            </div>
 
-<script>
-    document.querySelector('.dropoutBtn').addEventListener('click', function (e) {
-        let fn;
-        let inputs = [].slice.call(document.querySelector("form").elements);
-        data = inputs.reduce(function (pre, next) {
-            pre[next.name] = next.value;
-            return pre;
-        }, {});
-        console.log("data = " + data)
-
-        fn = function (checkResult) {
-            if (checkResult.result === 0) {
-                console.log(checkResult)
-                alert(checkResult.errMsg)
-                document.location.href = "/auth/dropout"
-            } else {
-                alert(checkResult.successMsg)
-                document.location.href = "/";
-            }
-        }
-        sendToCheck('/auth/dropout/dropUser', data, fn)
-    })
-
-    function sendToCheck(url, data, fn) {
-        const xhr = new XMLHttpRequest()
-        xhr.open('POST', url)
-        if (data) {
-            data = JSON.stringify(data)
-            console.log(data)
-            xhr.setRequestHeader('Content-Type', "application/json")
-        } else {
-            data = null
-        }
-        xhr.send(data)
-
-        xhr.addEventListener('load', function () {
-            const result = JSON.parse(xhr.responseText)
-            fn(result)
-        })
-    }
-</script>
+            <div class="ml-auto p-4 mt-2">
+                <div>
+                    <a class="btn btn-primary" id="logout" href="/auth/logout">로그아웃</a>
+                    <a class="btn btn-primary" id="dropout" href="/auth/dropout">회원탈퇴</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+<main class="container text-center">
+    <h3 class="mt-5">정말로 탈퇴하시겠어요?ㅜ.ㅜ</h3>
+    <hr>
+    <form class="form-auth" action="/auth/dropout" method="post">
+        <img class="mb-4" src="/static/dropout.png" alt="" width="72" height="72">
+        <h2 class="mb-3 font-weight-normal">회원탈퇴</h2>
+        <input class="logininput my-1" type="password" placeholder="비밀번호를 확인해주세요" name="PW" /> <br />
+        <button type="button" class="dropoutBtn">회원탈퇴</button>
+    </form>
+</main>
+<footer class="text-muted">
+    <div class="container">
+        <hr class="featurette-divider">
+        <p class="float-right">
+            <a href="/index">Back to Home</a>
+        </p>
+        <p>오픈SW플랫폼 Team17 이소망, 이채은, 최희조</p>
+    </div>
+</footer>
+<script type="module" src="/src/js/dropOut.js"></script>
 </body>
 </html>

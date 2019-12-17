@@ -1,0 +1,127 @@
+@import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css);
+
+body{
+    font-family: 'NanumSquare', sans-serif;
+}
+
+.container {
+    width: 970px;
+    max-width: none !important;
+    font-family: 'NanumSquare', sans-serif;
+    margin: 0 auto;
+}
+
+.form-auth{
+    width: 100%;
+    max-width: 380px;
+    padding: 0.75rem;
+    margin: 0 auto;
+}
+
+
+nav{
+    width: 75%;
+    margin: 0 auto;
+}
+
+ul li {
+    display: inline;
+    text-align: center;
+}
+
+.nav-a {
+    display: inline-block;
+    /* width: 50%;  */
+    padding: 0 0;
+    margin: 3rem 0 0 0;
+    text-decoration: none;
+    color: #333;
+}
+
+.loginword{
+    margin-bottom: 1.875rem;
+}
+
+.logininput{
+    line-height: 1;
+    width:100%;
+    border: 0.0625rem solid #fdbf00;
+    border-radius:0.3125rem;
+    padding: 0.5rem;
+    text-align: left;
+    font-size: 1rem;
+    color: #111111;
+}
+
+input[type="password"] {
+    font-size: 1rem;
+    font: small-caption;
+}
+
+
+hr{
+    width:31.25rem;
+    text-align: center;
+    color: #111111;
+}
+
+.loginBtn{
+    border: none;
+    width:100%;
+    padding: 0.5rem;
+    height:2.5rem;
+    font-size: 1.25rem;
+    background-color: #fdbf00;
+    border-radius:0.3125rem;
+    margin: 0.1875rem;
+    color: white;
+}
+
+.dropoutBtn{
+    border: none;
+    width:100%;
+    padding: 0.5rem;
+    height:2.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    background-color: #fdbf00;
+    border-radius:0.3125rem;
+    margin: 0.1875rem;
+    color: white;
+}
+
+.logResult{
+    font-size: 1rem;
+    text-align: left;
+}
+
+#signup, #dropout{
+    background-color: #FF9100;
+    border: none;
+}
+
+#login, #logout {
+    background-color: #FFDA2D;
+    border: none;
+}
+
+footer {
+    width:70%;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    margin: 0 auto;
+}
+
+footer hr{
+    width: 100%;
+    text-align: center;
+    color: #111111;
+}
+
+footer p {
+    margin-bottom: .25rem;
+}
+
+.featurette-divider {
+    margin-top: 5rem; /* Space out the Bootstrap <hr> more */
+}

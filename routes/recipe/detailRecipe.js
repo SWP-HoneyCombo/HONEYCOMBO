@@ -7,6 +7,8 @@ var mysql = require('mysql')
 var dbConfig = require(path.join(__dirname, '../dbConnect')).dbConfig.localOption
 var conn = mysql.createConnection(dbConfig)
 
+var async = require('async')
+
 // rendering view with query result - format : json
 router.get('/viewDetail/:TITLE', function (req, res) {
     var id = req.user
@@ -23,82 +25,80 @@ router.get('/viewDetail/:TITLE', function (req, res) {
     var queryList = [];
     var productList = []
 
-    var firstQuery = function (callback) {
-        var recipeQuery = 'select IMGFILENAME as imgPath, TITLE as title, TOTALPRICE as totalPrice, ' +
-            'TOTALTIME as totalTime, DIFFICULTY as difficulty, CONTENTS as recipeContents ' +
-            'from recipe where TITLE ="' + title + '";'
-        var commentQuery = 'select comment.USERID as userId, COMMENTCONTENTS as commentContents, RATE as rate ' +
-            'from comment inner join recipe on comment.RECIPETITLE=recipe.TITLE where TITLE="' + title + '";'
-        var tagQuery = 'select TAGCONTENTS as productList from recipe where TITLE = "' + title + '";'
-        var productQuery = 'select IMGFILENAME as imgPath, ITEMNAME as itemName, ITEMPRICE as itemPrice from product where ITEMNAME in (?)'
+    var recipeQuery = 'select IMGFILENAME as imgPath, TITLE as title, USERID as writerID, TOTALPRICE as totalPrice, ' +
+        'TOTALTIME as totalTime, DIFFICULTY as difficulty, VIDEOURL as videoUrl, content1, content2, content3, content4, content5 ' + //CONTENTS as recipeContents ' +
+        'from recipe where TITLE ="' + title + '";'
+    var commentQuery = 'select comment.USERID as userId, COMMENTCONTENTS as commentContents, RATE as rate ' +
+        'from comment inner join recipe on comment.RECIPETITLE=recipe.TITLE where TITLE="' + title + '";'
+    var tagQuery = 'select TAGCONTENTS as productList from recipe where TITLE = "' + title + '";'
+    var productQuery = 'select IMGFILENAME as imgPath, ITEMNAME as itemName, ITEMPRICE as itemPrice from product where ITEMNAME in (?)'
 
-        conn.query(recipeQuery + commentQuery + tagQuery, function (err, rows, fields) {
-            if (err) return callback(err)
-            if (rows.length) {
-                var sumRate = 0;
-                var avgRate = 0;
-                var commentCnt = rows[1].length
+    async.waterfall([
+            function (callback) { // get recipe, comment, tag
+                console.log("first query execute")
+                conn.query(recipeQuery + commentQuery + tagQuery, function (err, rows, fields) {
+                    if (err) return callback(err)
+                    if (rows.length) {
+                        console.log("first query success")
+                        var sumRate = 0;
+                        var avgRate = 0;
+                        var commentCnt = rows[1].length
 
-                if (commentCnt) {
-                    for (var i = 0; i < rows[1].length; i++) {
-                        sumRate += rows[1][i].rate;
-                    }
-                    avgRate = sumRate / rows[1].length;
-                    recipeDetailData.avgRate = avgRate;
-                } else {
-                    // avgRate = 0;
-                    recipeDetailData.avgRate = "평점 미등록"
-                }
-
-                recipeDetailData.items = {};
-                recipeDetailData.items.recipeData = rows[0];
-                recipeDetailData.items.comment = rows[1];
-
-                productList = rows[2][0].productList.split('#')
-                productList.shift() // remove first value ' '
-
-                // TODO : remove duplicated query
-                var secondQuery = function (callback) {
-                    conn.query(productQuery, [productList], function (err, rows2, fields) {
-                        if (err) return callback(err)
-                        if (rows2.length) {
-                            for (var i = 0; i < rows2.length; i++) {
-                                queryList.push(rows2[i]);
+                        if (commentCnt) {
+                            for (var i = 0; i < rows[1].length; i++) {
+                                sumRate += rows[1][i].rate;
                             }
-                            recipeDetailData.items.usedProduct = queryList
+                            avgRate = sumRate / rows[1].length;
+                            recipeDetailData.avgRate = avgRate;
                         } else {
-                            console.log("err")
+                            // avgRate = 0;
+                            recipeDetailData.avgRate = "평점 미등록"
                         }
-                        console.log("detail data : ")
-                        console.log(recipeDetailData.items)
-                        callback(null, recipeDetailData)
-                    })
-                }
-            } else {
-                recipeDetailData.items = ""
-                console.log('none query result')
-            }
-            // secondQuery callback function for rendering
-            secondQuery(function (err, recipeDetailData) {
-                if (err) {
-                    console.log("DB err")
-                } else {
-                    res.statusCode = 200
-                    res.render('recipeView/detailRecipe.ejs', recipeDetailData)
-                }
-            })
-            callback(null, recipeDetailData);
-        });
-    };
 
-    // callback query result for ejs rendering
-    console.log("default page rendering callback");
-    firstQuery(function (err, recipeDetailData) {
-        if (err) console.log("Database error!")
-        else {
-            console.log("firstQuery callback")
+                        recipeDetailData.items = {};
+                        recipeDetailData.items.recipeData = rows[0];
+                        recipeDetailData.items.comment = rows[1];
+
+                        productList = rows[2][0].productList.split('#')
+                        productList.shift() // remove first value ' '
+
+                        callback(null, productList, recipeDetailData);
+                    } else {
+                        callback(err);
+                    }
+                });
+            },
+            // productList에 있는 상품 정보를 불러온다.
+            function (productList, recipeDetailData, callback) {
+                console.log("second query execute")
+                conn.query(productQuery, [productList], function (err, rows2, fields) {
+                    if (err) return callback(err)
+                    if (rows2.length) {
+                        console.log("second query success")
+                        for (var i = 0; i < rows2.length; i++) {
+                            queryList.push(rows2[i]);
+                        }
+                        recipeDetailData.items.usedProduct = queryList
+                    } else {
+                        console.log("err")
+                    }
+                    // console.log("detail view data : ")
+                    // console.log(recipeDetailData.items)
+                    callback(null, recipeDetailData)
+                });
+            }
+        ],
+        function (err, recipeDetailData) {
+            if (err) {
+                console.log("DB err")
+            } else {
+                console.log("last query result = ")
+                console.log(recipeDetailData)
+                res.statusCode = 200
+                res.render('recipeView/detailRecipe.ejs', recipeDetailData)
+            }
         }
-    });
+    );
 })
 
 router.post('/writeComment', function (req, res) {
@@ -130,7 +130,7 @@ router.post('/writeComment', function (req, res) {
                     writeComment.userId = id
                     writeComment.contents = commentWrite
                     writeComment.rate = usersRate;
-                    console.log('insert comment data')
+
                     // insert comment data and update rating!
                     var insertQuery = 'INSERT INTO COMMENT (RECIPETITLE, USERID, COMMENTCONTENTS, RATE) values (?, ?, ?, ?)'
                     var params = [recipeTitle, id, commentWrite, usersRate]

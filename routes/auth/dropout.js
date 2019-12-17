@@ -12,7 +12,7 @@ router.get('/', function (req, res) {
 
 router.post('/dropUser', function (req, res) {
     var userID = req.user
-    var uncheckedPW = req.body.inputPW
+    var uncheckedPW = req.body.PW
 
     var checkPW = function (callback) {
         var checkResult = {}

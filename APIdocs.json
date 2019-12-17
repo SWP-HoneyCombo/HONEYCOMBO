@@ -1,0 +1,431 @@
+"public"
+	ㄴ "images"
+		ㄴ IMG FILE...
+
+	ㄴ "javascripts"
+		ㄴ client JS file...
+
+	ㄴ "stylesheets"
+		ㄴ client css file...
+
+
+"routes"
+	ㄴ "auth"
+		ㄴ dropout.js
+			ㄴ path : "./auth/dropout"
+				ㄴ method : GET
+
+			ㄴ path : "./auth/dropout/dropUser"
+				ㄴ method : POST
+				ㄴ status : fail
+					ㄴ {
+						"checkResult" : {
+							"result" : 0
+							"errMsg" : "unmatched PW"
+						}
+					}
+				ㄴ status : success
+					ㄴ {
+						"checkResult" :{
+							"result" : 1
+							"successMsg" : "dropout success"
+						}
+					}
+
+		ㄴ signup.js
+			ㄴ path:"./auth/signup"
+				ㄴ method : GET
+			ㄴ path : "./auth/signup"
+				ㄴ method : POST
+					ㄴ status : fail
+						ㄴ {
+							"message" : "ID is already used"
+						}
+					ㄴ status : success
+						ㄴ {
+							"ID" : ID
+							"tempID" : insertId
+						}
+
+		ㄴ login.js
+			ㄴ path:"./auth/login"
+				ㄴ method:GET
+
+			ㄴ path:"./auth/login"
+				ㄴ method : POST
+				ㄴ status : fail
+					ㄴ {
+						code : 401
+						"message" : "Wrong ID | PW"
+					}
+				ㄴ status : success
+					ㄴ {
+						"user" : {
+							ID:"id",
+							PW:"pw"
+						}
+					}
+					
+		ㄴ logout.js
+			ㄴ path : "./auth/logout"
+				ㄴ method : GET
+
+	ㄴ "product"
+		ㄴ main.js
+			ㄴ path : "./product/main"
+				ㄴ method : GET
+				ㄴ  status : notLogin
+					ㄴ {
+						"productList" : {
+							"isLoggedin" : false,
+							"items" : {[
+								"ITEMNAME" : ITEMNAME(string),
+								"ITEMPRICE" : ITEMPRICE(integer),
+								"COMPANY" : COMPANY(string)
+								"REGISTRATIONDATE" : REGISTRATIONDATE(datetime)
+								"IMGFILENAME" : IMGFILENAME(string)
+							]}
+						}
+					}
+				ㄴ status : login
+					ㄴ {
+						"prouctList" : {
+							"isLoggedin" : true,
+							"userID" : id,
+							"items" : {[
+								"ITEMNAME" : ITEMNAME(string),
+								"ITEMPRICE" : ITEMPRICE(integer),
+								"COMPANY" : COMPANY(string)
+								"REGISTRATIONDATE" : REGISTRATIONDATE(datetime)
+								"IMGFILENAME" : IMGFILENAME(string)
+							]}
+						}
+					}
+			ㄴ path : "./product/main/search/:ITEMNAME"
+				ㄴ method : GET
+				ㄴ status : fail
+					ㄴ {
+						"productList" : {
+							"result" : 0
+						}
+					}
+				ㄴ status : success
+					ㄴ {
+						"productList" : {
+							"result" : 1,
+							"items" : {[
+								"ITEMNAME" : ITEMNAME(string),
+								"ITEMPRICE" : ITEMPRICE(integer),
+								"COMPANY" : COMPANY(string)
+								"REGISTRATIONDATE" : REGISTRATIONDATE(datetime)
+								"IMGFILENAME" : IMGFILENAME(string)
+							]}
+						}
+					}
+			ㄴ path : "./product/main/classify/:COMPANY"
+				ㄴ method : GET
+				ㄴ status : fail
+					ㄴ  {
+						"productByCompany" : {
+							"result" : 0
+						}
+					}
+				ㄴ status : success
+					ㄴ {
+						"productByCompany" : {
+							"result" : 1
+							"items" : {[
+								"ITEMNAME" : ITEMNAME(string),
+								"ITEMPRICE" : ITEMPRICE(integer),
+								"COMPANY" : COMPANY(string)
+								"REGISTRATIONDATE" : REGISTRATIONDATE(datetime)
+								"IMGFILENAME" : IMGFILENAME(string)
+							]}
+						}
+					}
+			ㄴ path : "./product/main/sort/:PRICEORDER"
+				ㄴ method : GET
+				ㄴ status : fail
+					ㄴ  {
+						"productByPrice" : {
+							"result" : 0
+						}
+					}
+				ㄴ status : success
+					ㄴ {
+						"productByPrice" : {
+							"result" : 1
+							"items" : {[
+								"ITEMNAME" : ITEMNAME(string),
+								"ITEMPRICE" : ITEMPRICE(integer) - order by DESC | ASC,
+								"COMPANY" : COMPANY(string)
+								"REGISTRATIONDATE" : REGISTRATIONDATE(datetime)
+								"IMGFILENAME" : IMGFILENAME(string)
+							]}
+						}
+					}
+
+	ㄴ "recipe"
+		ㄴ recipeMain.js
+			ㄴ path : "./recipe/mainRecipe"
+				ㄴ method : GET
+				ㄴ status : notLogin
+					ㄴ {
+						"recipeList" : {
+							"isLoggedin" : false,
+							"items" : {
+								"TITLE" : TITLE(string),
+								"USERID" : USERID(string),
+								"IMGFILENAME" : IMGFILENAME(string),
+								"TAGCONTENTS" : TAGCONTENTS(string),
+								"TOTALPRICE" : TOTALPRICE(integer)
+							}
+						}
+					}
+				ㄴ status : login
+					ㄴ {
+						"recipeList" : {
+							"isLoggedin" : true,
+							"userId" : id,
+							"items" : {
+								"TITLE" : TITLE(string),
+								"USERID" : USERID(string),
+								"IMGFILENAME" : IMGFILENAME(string),
+								"TAGCONTENTS" : TAGCONTENTS(string),
+								"TOTALPRICE" : TOTALPRICE(integer)
+							}
+						}
+					}
+			ㄴ path : "./recipe/mainRecipe/search"
+				ㄴ method : POST
+				ㄴ  status : fail
+					ㄴ  {
+						"recipeList" : {
+							"result" : 0
+						}
+					}
+				ㄴ status : success
+					ㄴ {
+						"recipeList" : {
+							"result" : 1,
+							"items" : {[
+								"TITLE" : TITLE(string),
+								"USERID" : USERID(string),
+								"IMGFILENAME" : IMGFILENAME(string),
+								"TOTALPRICE" : TOTALPRICE(integer),
+								"TAGCONTENTS" : TAGCONTENTS(string)
+							]}
+						}
+					}
+			ㄴ path : "./recipe/mainRecipe/search/:TAG"
+				ㄴ method : GET
+					ㄴ {
+						"recipeList" : {
+							"items" : {[
+								"IMGFILENAME" : IMGFILENAME(string),
+								"TAGCONTENTS" : TAGCONTENTS(string),
+								"TITLE" : TITLE(string),
+								"USERID" : USERID(string),
+								"TOTALPRICE" : TOTALPRICE(integer)
+							]}
+						}
+					}
+
+
+		ㄴ detailRecipe.js
+			* description : "recipeDetailData" json in loginStatus and status is same thing
+			ㄴ path : "./recipe/detailRecipe/viewDetail/:TITLE"
+				ㄴ method : GET
+				ㄴ loginStatus : true
+					ㄴ {
+						"recipeDetailData" : {
+							"isLoggedin" : true,
+							"userID" : id
+						}
+					}
+				ㄴ loginStatus : false
+					ㄴ {
+						"recipeDetailData" : {
+							"isLoggedin" : false
+						}
+					}
+				ㄴ status : success
+					ㄴ {
+						"recipeDetailData" : {
+							"avgRate" : float | "평점 미등록",
+							"items" : {
+								"recipeData": [
+									object : {
+										"imgPath" : IMGFILENAME(string),
+										"title" : TITLE(string),
+										"writerID" : USERID(string),
+										"totalPrice" : TOTALPRICE(integer),
+										"totalTime" : TOTALTIME(string) - ex:'30min',
+										"difficulty" : DIFFICULTY(string) - ex:'mid',
+										"videoUrl" : VIDEOURL(string) - ex:'TOydfDd94SQ',
+										"content1" : CONTENT1(string),
+										"content2" : CONTENT2(string),
+										"content3" : CONTENT3(string),
+										"content4" : CONTENT4(string),
+										"content5" : CONTENT5(string)
+									}
+								],
+								"comment" : [
+									object : {
+										"userId" : USERID(string),
+										"commentContents" : COMMENTCONTENTS(string),
+										"rate" : RATE(integer)
+									},
+									object : {...}
+								],
+								"usedProduct" : [
+									object : {
+										"imgPath" : IMGFILENAME(string),
+										"itemName" : ITEMNAME(string),
+										"itemPrice" : ITEMPRICE(integer)
+									},
+									object : {....}
+								]
+							}
+						}
+					}
+				ㄴ status : fail
+					ㄴ {
+						"recipeDetailData" : {
+							"items" : ""
+						}
+					}
+
+			ㄴ path : "./recipe/detailRecipe/writeComment"
+				ㄴ method : POST
+				ㄴ statusCode : 401
+					ㄴ {
+						"writeComment" : {
+							"result" : 0,
+							"errMsg" : "댓글 작성은 로그인 후 이용 가능"
+						}
+					}
+				ㄴ statusCode : 403
+					ㄴ {
+						"writeComment" : {
+							"result" : 0,
+							"errMsg" : "이미 댓글 등록했음"
+						}
+					}
+				ㄴ statusCode : 200
+					ㄴ {
+						"writeComment" : {
+							"result" : 1,
+							"userId" : USERID(string),
+							"contents" : COMMENTCONTENTS(string),
+							"rate" : RATE(integer)
+						}
+					}
+			ㄴ path : "./recipe/detailRecipe/editComment/:title"
+				ㄴ method : GET
+				ㄴ statusCode : 200
+					ㄴ {
+						"editComment" : {
+							"commentContents" : COMENTCONTENTS(string),
+							"rate" : RATE(ingeter)
+						}
+					}
+				ㄴ statusCode : 204
+					ㄴ {
+						"editComment" : ""
+					}
+
+			ㄴ path : "./recipe/detailRecipe/updateComment/:title/:comment/:rate"
+				ㄴ method : PUT
+				ㄴ statusCode : 200 - update affectedRows
+					ㄴ {
+						"updatedComment" : {
+							"result" : 1
+						}
+					}
+				ㄴ statusCode : 204 - affectedRows 0
+					ㄴ {
+						"updatedComment" : {
+							"result" : 0
+						}
+					}
+
+			ㄴ path : "./recipe/detailRecipe/deleteComment/:title"
+				ㄴ method : DELETE
+				ㄴ statusCode : 200
+					ㄴ {
+						"deleteComment" : {
+							"result" : 1,
+							"successMsg" : "잘 삭제됨"
+						}
+					}
+
+		ㄴ writeRecipe.js
+			ㄴ path : "./recipe/writeRecipe"
+				ㄴ method : GET
+				ㄴ  status : notLogin
+					ㄴ {
+						"writeRecipeData" : {
+							"isLoggedin" : false - redirect to login page
+						}
+					}
+				ㄴ status : login
+					ㄴ {
+						"writeRecipeData" : {
+							"isLoggedin" : true,
+							"userID" : id,
+							"items" : [
+								object : {
+								"itemName" : ITEMNAME(string),
+								"itemPrice" : ITEMPRICE(integer),
+								"imgPath" : IMGFILENAME(string)
+								},
+								object : {...}
+							]
+						}
+					}
+			ㄴ path : "./recipe/writeRecipe/postRecipe"
+				ㄴ method : POST
+				* issues : 에러메세지 및 상태코드는 입력되어 있으나 리스폰스해주진 않은 상태 - server
+				ㄴ statusCode : 403 - already in recipe title
+					ㄴ {
+						"writeRecipeContent" : {
+							"result" : 0,
+							"errMsg" : "이미 존재하는 레시피 제목입니다."
+						}
+					}
+				* description : didn't response to client, jsut redirect on server side
+				* issuses : call detailRecipe page using res.redirect from writeRecipe page, but cant rendering page
+				ㄴ statusCode : 200 - insert query success
+					ㄴ {
+						"writeRecipeContent" : {
+							"result" : 1
+							"title" : TITLE(string)
+						}
+					}
+				ㄴ statusCode : 204 - can't insert query!
+					ㄴ {
+						"writeRecipeContent" : {
+							"result" : 0
+						}
+					}
+	ㄴ dbConnects.js
+	ㄴ index.js
+
+
+"views"
+	ㄴ "log-sess"
+		ㄴ login.ejs
+		ㄴ signup.ejs
+		ㄴ dropOut.ejs
+
+	ㄴ "productView"
+		ㄴ productMain.ejs
+	ㄴ "recipeView"
+		ㄴ detailRecipe.ejs
+		ㄴ mainRecipe.ejs
+		ㄴ writeRecipe.ejs
+
+app.js
+package.json
+package-lock.json

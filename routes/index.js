@@ -18,7 +18,7 @@ var dbConfig = require('./dbConnect').dbConfig.localOption
 var conn = mysql.createConnection(dbConfig)
 var passport = require('passport')
 
-router.use('/', product)
+// router.use('/', product)
 router.use('/product/main', product)
 router.use('/recipe/mainRecipe', mainRecipe)
 router.use('/recipe/detailRecipe', detailRecipe)
@@ -27,6 +27,31 @@ router.use('/auth/signup', signup)
 router.use('/auth/login', login)
 router.use('/auth/logout', logout)
 router.use('/auth/dropout', dropout)
+
+router.get('/', function(req, res) {
+    var id = req.user
+    var indexInfo = {}
+
+    if (!id) {
+        indexInfo.isLoggedin = false;
+    } else {
+        indexInfo.isLoggedin = true;
+        indexInfo.userID = id;
+    }
+    res.render('./main.ejs', indexInfo)
+})
+router.get('/index', function(req, res) {
+    var id = req.user
+    var indexInfo = {}
+
+    if (!id) {
+        indexInfo.isLoggedin = false;
+    } else {
+        indexInfo.isLoggedin = true;
+        indexInfo.userID = id;
+    }
+    res.render('./main.ejs', indexInfo)
+})
 
 
 module.exports = router;

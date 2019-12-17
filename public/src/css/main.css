@@ -1,0 +1,114 @@
+@import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css);
+
+body{
+  font-family: 'NanumSquare', sans-serif;
+}
+
+.jumbotron{
+  background-image: url("../../images/static/banner.png");
+  width: 65%;
+  height: 26.25rem;
+  background-repeat: no-repeat;
+  margin: 0 auto;
+  background-size: 100% 100%;
+}
+
+.container {
+  width: 970px;
+  max-width: none !important;
+  font-family: 'NanumSquare', sans-serif;
+  margin: 0 auto;
+}
+
+.main{
+  width:65%;
+  margin: 0 auto;
+}
+
+
+.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+
+nav{
+  width: 75%;
+  margin: 0 auto;
+}
+
+ul li {
+  display: inline;
+  text-align: center;
+}
+
+.nav-a {
+  display: inline-block;
+  /* width: 50%;  */
+  padding: 0 0;
+  margin: 3rem 0 0 0;
+  text-decoration: none;
+  color: #333;
+}
+
+
+.service-intro, .service-function{
+  width:70%;
+  margin: 0 auto;
+}
+
+.title-list{
+  font-weight: 800;
+  font-size: 2rem;
+  font-family: 'NanumSquare', sans-serif;
+}
+
+.small-title{
+  font-size: 1.8rem;
+  font-weight: bolder;
+  font-family: 'NanumSquare', sans-serif;
+  margin-bottom: 2rem;
+}
+
+.small-title2{
+  font-size: 1.4rem;
+  font-weight: bolder;
+  font-family: 'NanumSquare', sans-serif;
+  margin-bottom: 2rem;
+  color: #333333;
+}
+
+#servce_description{
+  margin-top: 2rem;
+  margin-bottom:  2rem;
+  font-style: italic;
+  font-weight: bolder;
+  font-size: 2.1rem;
+  font-family: 'NanumSquare', sans-serif;
+}
+
+p{
+  font-size: 1.2rem;
+  font-family: 'NanumSquare', sans-serif;
+}
+
+footer {
+  width:70%;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  margin: 0 auto;
+}
+
+footer p {
+  margin-bottom: .25rem;
+}
+
+#signup, #dropout{
+  background-color: #FF9100;
+  border: none;
+}
+
+#login, #logout {
+  background-color: #FFDA2D;
+  border: none;
+}
+
+.featurette-divider {
+  margin-top: 5rem; /* Space out the Bootstrap <hr> more */
+}

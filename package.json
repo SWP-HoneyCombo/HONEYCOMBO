@@ -6,17 +6,26 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
+    "debug": "^4.1.1",
+    "ejs": "^3.0.1",
     "express": "~4.16.1",
-    "http-errors": "~1.6.3",
+    "express-session": "^1.17.0",
+    "http-errors": "^1.7.3",
     "morgan": "~1.9.1",
-    "pug": "2.0.0-beta11",
-    "ejs": "~2.7.1",
-    "mysql": "*"
+    "mysql": "*",
+    "package.json": "^2.0.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.4"
   },
   "engines": {
     "node": "12.13.0",
     "npm": "6.12.0"
+  },
+  "devDependencies": {
+    "clean-css-cli": "^4.3.0"
   }
 }

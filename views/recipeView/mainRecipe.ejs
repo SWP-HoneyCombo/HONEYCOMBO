@@ -3,143 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <title>HoneyCombo</title>
+    <link rel="stylesheet" type="text/css" href="/src/css/recipeMain.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/src/js/tags/jquery.tag-editor.css">
 </head>
 <body>
-<h1>레시피 메인 페이지</h1>
-<nav>
-    <!--    login, signup, logout, product, reciped -->
-    <ul>
-        <li><a href="/product/main">상품</a></li>
-        <li><a href="/recipe/mainRecipe">레시피</a></li>
-    </ul>
+<header>
+    <div class="container d-flex mt-2">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="p-2">
+                <a href="/index">
+                    <div class='logo-wrapper'>
+                        <img class='img' src="/static/logo.png" width="200" height="90">
+                    </div>
+                </a>
+            </div>
+            <div class="p-2">
+                <ul>
+                    <li id="nav_list"><a class="nav-a one text-dark ml-2 mr-5" href="/product/main" style="text-decoration:none"><h4>상품</h4></a></li>
+                    <li id="nav_list"><a class="nav-a two text-dark ml-3" href="/recipe/mainRecipe" style="text-decoration:none"><h4>레시피</h4></a></li>
+                    <hr id="nav_hr">
+                </ul>
+            </div>
 
-    <div class="auth">
-        <% if (isLoggedin)  { %>
-            <div>
-                <h5><%= userID %>님 안녕하세요!</h5>
-                <a href="/auth/logout">logout</a>
-                <a href="/auth/dropout">drop out</a>
+            <div class="ml-auto p-4 mt-2">
+                <% if (isLoggedin)  { %>
+                    <h6 class="d-inline mt-1"><%= userID %>님 반가워요 :)</h6>&nbsp;
+                    <a class="btn btn-primary" id="logout" href="/auth/logout">로그아웃</a>
+                    <a class="btn btn-primary" id="dropout" href="/auth/dropout">회원탈퇴</a>
+                <% } %>
+                <% if (!isLoggedin)  { %>
+                    <div>
+                        <a class="btn btn-primary" id="login" href="/auth/login">로그인</a>
+                        <a class="btn btn-primary" id="signup" href="/auth/signup">회원가입</a>
+                    </div>
+                <% } %>
             </div>
-        <% } %>
-        <% if (!isLoggedin) { %>
-            <div>
-                <li><a href="/auth/login">login</a></li>
-                <li><a href="/auth/signup">signup</a></li>
-            </div>
-        <% } %>
+        </nav>
     </div>
-</nav>
+</header>
+<main>
+    <div class="container showWrap">
+        <div class="recipe-Search text-center">
+            <div class="row justify-content-center mt-4">
+                <img src="/static/recipe_icon.png" width="50" height="50">
+                <h4 class="small-title align-center mx-3 mt-2">편의점 레시피</h4>
+            </div>
 
-<section class="showWrap">
-    <ul>
-        <!--TODO: if text input area is empty, blocking button at front and don't send request to server-->
-        <li class="recipePriceSearch">
-            <form action="" method="post">
-                <!--                TODO : using type = number-->
-                <input type="text" name="minPrice">원 ~
-                <input type="text" name="maxPrice">원
-            </form>
-            <button>검색하기</button>
-        </li>
+            <div class="row justify-content-center">
+                <%const recipeNum = items.length%>
+                <p>현재까지 총 <span><%= recipeNum%></span> 개의 레시피가 모였어요!! &nbsp;٩(`･ω･´)و</p>
+            </div>
 
-    </ul>
-    <!--TODO: show default result recipe list using 'see more' button-->
-    <section class="defaultResult">
-        <span>현재 <%= items.length %>개의 레시피가 존재합니다 :) </span>
-        <% if(items != null && items.length > 0){ %>
-        <ul>
-            <% for ( var i = 0; i < items.length; i++){ %>
-                <article>
-                    <!--TODO : change source path and change IMGFILENAME to format contained file-->
-                    <% var imgSrc = '/images/' + items[i].IMGFILENAME %>
-                    <% var tagStr = items[i].TAGCONTENTS %>
-                    <% var subItemList = tagStr.split('#') %>
-                    <% var detailUrl = '/recipe/detailRecipe/' + items[i].TITLE %>
-                    <% var tempTitle = items[i].TITLE %>
-
-                    <h4><%= i %>번째 레시피</h4>
-                    <li class="seeDetail">
-                        <% var actionUrl = "/recipe/detailRecipe/viewDetail/" + tempTitle %>
-                        <form action="<%= actionUrl %>" method='get'>
-                            <input type="image" src="<%= imgSrc %>" alt="Submit Form"/>
+            <div class="searchsection row justify-content-center mt-3">
+                <ul>
+                    <!--TODO: if text input area is empty, blocking button at front and don't send request to server-->
+                    <li class="recipePriceSearch row" name="recipePriceSearch">
+                        <span class="search align-self-center" id="searchword">가격 검색 </span>
+                        <form class="search align-self-center form-inline" action="" method="post">
+                            <!--                TODO : using type = number-->
+                            <input type="text" class="form-control" name="minPrice" placeholder="원">
+                            <span class="mx-2">~</span>
+                            <input type="text" class="form-control" name="maxPrice" placeholder="원">
                         </form>
+                        <button class="search align-self-center btn btn-primary ml-3" id="searchButton">검색</button>
                     </li>
-                    <li><%= tempTitle %></li>
-                    <li><%= items[i].USERID %></li>
-                    <li><%= items[i].TOTALPRICE %></li>
-                    <li>
-                        <% for( var j = 1; j < subItemList.length; j++) { %>
-                            <%= subItemList[j] %>&nbsp;|&nbsp;
-                        <% } %>
+
+                    <li class="recipeTagSearch row mt-4" name="recipePriceSearch">
+                        <span class="search align-self-center" id="searchword">태그 검색 </span>
+                        <textarea class="search" id="tags"></textarea>
+                        <button class="search btn btn-primary" id="tagsButton">검색</button>
                     </li>
-                    <br>
-                </article>
-            <% } %>
-            <% } else { %>
-                <p>상품 없음</p>
-            <% } %>
-        </ul>
-    </section>
-</section>
+                </ul>
+            </div>
+            <div class="write text-right">
+                <a id="writeButton" href="/recipe/writeRecipe" class="mr-3"><img src="/static/write_icon.png" width=28 height=28 class="mr-2">레시피 작성</a>
+            </div>
+        </div>
+        <div class="recipe-content">
+            <hr>
+            <div class="defaultResult mt-2">
+                <div class="existRecipe mt-5 mb-3">총 <span id="itemNum"><%= items.length %></span> 개의 레시피 </div>
+                <% if(items != null && items.length > 0){ %>
+                <ul>
+                    <% for ( var i = 0; i < items.length; i++){ %>
+                        <article class="recipe mx-4 my-1">
+                            <!--TODO : change source path and change IMGFILENAME to format contained file-->
+                            <% var imgSrc = items[i].IMGFILENAME %>
+                            <% var tagStr = items[i].TAGCONTENTS %>
+                            <% var subItemList = tagStr.split('#') %>
+                            <% var detailUrl = '/recipe/detailRecipe/' + items[i].TITLE %>
+                            <% var tempTitle = items[i].TITLE %>
 
-<a href="/recipe/writeRecipe">글쓰기</a>
-
-<!--ajax javascript part-->
+                            <!--<h4><%= i %>번째 레시피</h4>-->
+                            <li class="seeDetail">
+                                <% var actionUrl = "/recipe/detailRecipe/viewDetail/" + tempTitle +"/"%>
+                                <form action="<%= actionUrl %>" method='get'>
+                                    <input id="recipeimage" type="image" src="<%= imgSrc %>" alt="Submit Form" />
+                                </form>
+                            </li>
+                            <li id="recipeUser"><span><%= items[i].USERID %></span> 님의 레시피</li>
+                            <li id="recipeTitle"><%= tempTitle %></li>
+                            <li id="recipePrice"><%= items[i].TOTALPRICE %>원</li>
+                            <li id="recipeItem"><a style="font-size: 0.9rem;">필요한 재료:</a>
+                                <% for( var j = 1; j < subItemList.length; j++) { %>
+                                    #<%= subItemList[j] %>&nbsp;
+                                <% } %>
+                            </li>
+                        </article>
+                    <% } %>
+                    <% } else { %>
+                        <p>상품 없음</p>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </div>
+<!--    <footer class="text-muted">-->
+<!--        <div class="container">-->
+<!--            <hr class="featurette-divider">-->
+<!--            <p class="float-right">-->
+<!--                <a href="#">Back to top</a>-->
+<!--            </p>-->
+<!--            <p class="float-left">오픈SW플랫폼 Team17 이소망, 이채은, 최희조</p>-->
+<!--        </div>-->
+<!--    </footer>-->
+</main>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script>
+<script src="/src/js/tags/jquery.caret.min.js"></script>
+<script src="/src/js/tags/jquery.tag-editor.js"></script>
 <script>
-    document.querySelector('.showWrap').addEventListener('click', function (e) {
-        let url, method, data, fn;
-        const target = e.target;
-        const li = target.closest('LI');
-        const showResult = document.querySelector(".defaultResult");
-        const type = li.className;
+    // jQuery UI autocomplete extension - suggest labels may contain HTML tags
+    // github.com/scottgonzalez/jquery-ui-extensions/blob/master/src/autocomplete/jquery.ui.autocomplete.html.js
+    $(function () {
+        $('#tags').tagEditor({
+            delimiter: '# ',
+            placeholder: '검색할 상품 태그들을 입력해주세요'
+        }).css('display', 'block').attr('readonly', true);
+    });
 
-        if (target.tagName !== "BUTTON") return;
-
-        switch (type) {
-            case "recipePriceSearch":
-                url = "/recipe/mainRecipe/search"
-                method = "POST"
-                // all elements select in form tag by name - maxPrice, minPrice
-                let inputs = [].slice.call(document.querySelector("form").elements);
-                data = inputs.reduce(function (pre, next) {
-                    pre[next.name] = next.value;
-                    return pre;
-                }, {});
-
-                fn = function (recipeList) {
-                    if (recipeList.result === 1) {
-                        // TODO : show result in default section
-                        for (var i = 0; i < recipeList.items.length; i++) {
-                            showResult.innerHTML = recipeList.items[i].TITLE;
-                        }
-                    } else {
-                        showResult.innerHTML = "일치하는 레시피 없음"
-                    }
-                }
-                break;
-        }
-        sendAjax(url, method, data, fn)
-    })
-
-    // @data : json format
-    function sendAjax(url, method, data, fn) {
-        const xhr = new XMLHttpRequest()
-        xhr.open(method, url)
-
-        if (data) {
-            data = JSON.stringify(data)
-            xhr.setRequestHeader('Content-Type', "application/json")
-        } else {
-            data = null
-        }
-        xhr.send(data)
-
-        xhr.addEventListener('load', function () {
-            const result = JSON.parse(xhr.responseText)
-            fn(result)
-        })
-    }
+    document.querySelector('#tagsButton').addEventListener('click', async function (e) {
+        let tags = $('#tags').tagEditor('getTags')[0].tags;
+        console.log(tags);
+    });
 </script>
-
+<script type="module" src="/src/js/mainRecipe.js"></script>
 </body>
 </html>

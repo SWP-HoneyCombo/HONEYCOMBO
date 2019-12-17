@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>HoneyCombo</title>
+    <link rel="stylesheet"  href="/src/css/main.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<header>
+    <div class="container d-flex mt-2">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="p-2">
+                <a href="/index">
+                    <div class='logo-wrapper'>
+                        <img class='img' src="/static/logo.png" width="200" height="90">
+                    </div>
+                </a>
+            </div>
+            <div class="p-2">
+                <ul>
+                    <li><a class="nav-a one text-dark ml-2 mr-5" href="/product/main" style="text-decoration:none"><h4>상품</h4></a></li>
+                    <li><a class="nav-a two text-dark ml-3" href="/recipe/mainRecipe" style="text-decoration:none"><h4>레시피</h4></a></li>
+                </ul>
+            </div>
+
+            <div class="ml-auto p-4 mt-2">
+                <% if (isLoggedin)  { %>
+                    <h6 class="d-inline mt-1"><%= userID %>님 반가워요 :)</h6>&nbsp;
+                    <a class="btn btn-primary" id="logout" href="/auth/logout">로그아웃</a>
+                    <a class="btn btn-primary" id="dropout" href="/auth/dropout">회원탈퇴</a>
+                <% } %>
+                <% if (!isLoggedin)  { %>
+                    <div>
+                        <a class="btn btn-primary" id="login" href="/auth/login">로그인</a>
+                        <a class="btn btn-primary" id="signup" href="/auth/signup">회원가입</a>
+                    </div>
+                <% } %>
+            </div>
+        </nav>
+    </div>
+</header>
+<main>
+    <section class="jumbotron">
+    </section>
+    <section>
+        <div class="service-intro px-5 py-3 pb-md-4 mx-auto text-left">
+            <div class="row ml-5">
+                <img src="/static/pick.png" class="mb-3" width=50 height="50">
+                <h2 class="title-list align-self-center ml-3">꿀조합 서비스는?</h2>
+            </div>
+            <div class="m-5">
+                <h3 id="servce_description">편의점 제품 안내 및 레시피 공유 서비스</h3>
+                <p>하나, 편의점 러버들을 위한 편의점 제품 정보 및 레시피를 제공해요</p>
+                <p>둘, 꿀조합러들과 자유롭게 편의점 레시피를 공유하고 소통할 수 있어요</p>
+                <p style="color:#FF641A">** 편의점 레시피를 작성하거나 댓글을 남기려면 꿀조합러가 되어주세요!</p>
+            </div>
+            <div class="row ml-5">
+                <img src="/static/magnifier.png" class="ml-5" width="30" height="30" alt="magnifier">
+                <h6 class="small-title2 ml-3">  꿀조합 둘러보기 o(*'▽'*)/☆ﾟ’ </h6>
+            </div>
+            <div class="row ml-5 justify-content-around">
+                <img src="/static/productMain.png" width=450 height="380" alt="productMain">
+                <img src="/static/recipeMain.png"  width=460 height="380" alt="recipeMain">
+            </div>
+            <div class="row ml-5 justify-content-around">
+                <p style="color:#333333;">상품 탭 UI</p>
+                <p style="color:#333333;">레시피 탭 UI</p>
+            </div>
+        </div>
+
+
+        <div class="service-function px-5 py-3 pt-md-5 pb-md-4 mx-auto text-left">
+            <div class="row ml-5">
+                <img src="/static/pick.png" class="mb-3" width=50 height="50">
+                <h2 class="title-list align-self-center ml-3">꿀조합 기능?</h2>
+            </div>
+            <div class="row m-5">
+                <div class="col-xs-3 mr-5">
+                    <img class='img-fluid' src="/static/product_icon.png" width="130" height="130">
+                </div>
+                <div class="col-xs-9 ml-5">
+                    <h4 class="small-title">편의점 상품</h4>
+                        <p>대표 편의점 <b>GS25</b>, <b>CU</b>의 상품들 편의점별로 보기</p>
+                        <p>낮은 가격순, 높은 가격순으로 정렬 가능</p>
+                        <p>원하는 편의점 상품 검색 가능</p>
+                </div>
+            </div>
+            <div class="row m-5">
+                <div class="col-xs-3 mr-5">
+                    <img class='img-fluid' src="/static/recipe_icon.png" width="130" height="130">
+                </div>
+                <div class="col-xs-8 ml-5">
+                    <h4 class="small-title">편의점 레시피</h4>
+                        <p>꿀조합러들이 올린 다양한 편의점 레시피 보기</p>
+                        <p>레시피 제조 <b>가격 범위</b>와 <b>재료 태그</b>로 검색 가능</p>
+                        <p>편의점 재료들을 선택하여 자유롭게 레시피 작성 가능</p>
+                        <p>다른 꿀조합러들의 레시피 평점을 확인하고 댓글 작성 가능 </p>
+                        <p>원하는 레시피를 다른 사람들에게 <b>카카오톡</b>을 통해 공유 가능 </p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</main>
+
+<footer class="text-muted">
+    <div class="container">
+        <hr class="featurette-divider">
+        <p class="float-right">
+            <a href="#">Back to top</a>
+        </p>
+        <p>오픈SW플랫폼 Team17 이소망, 이채은, 최희조</p>
+    </div>
+</footer>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.0/holder.js"></script>
+
+
+</body>
+</html>
